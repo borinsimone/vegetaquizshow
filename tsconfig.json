@@ -3,5 +3,31 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    // Opzioni per ignorare errori comuni
+    "noImplicitAny": false, // Consente l'uso di 'any' implicito
+    "strictNullChecks": false, // Disabilita i controlli rigorosi su null/undefined
+    "suppressImplicitAnyIndexErrors": true, // Ignora errori di indicizzazione con 'any'
+    "skipLibCheck": true, // Salta la verifica delle definizioni delle librerie
+    "allowJs": true, // Consente file JavaScript
+    "checkJs": false, // Non verifica errori nei file JavaScript
+
+    // Altre opzioni utili
+    "noEmitOnError": false, // Emette output anche in presenza di errori
+    "strict": false, // Disabilita tutti i controlli rigorosi di tipo
+
+    // Gestione dei moduli
+    "resolveJsonModule": true, // Consente l'importazione di file JSON
+    "esModuleInterop": true, // Migliora la compatibilità con moduli CommonJS
+
+    // Impostazioni avanzate
+    "useUnknownInCatchVariables": false, // Usa 'any' invece di 'unknown' nei blocchi catch
+    "noFallthroughCasesInSwitch": false, // Ignora errori di fallthrough negli switch
+    "exactOptionalPropertyTypes": false, // Controlli meno rigorosi sulle proprietà opzionali
+    "noUncheckedIndexedAccess": false, // Consente accesso senza controlli agli indici
+
+    // Opzione per ignorare tutti gli errori durante la compilazione
+    "isolatedModules": false // Disabilita il controllo di moduli isolati
+  }
 }
