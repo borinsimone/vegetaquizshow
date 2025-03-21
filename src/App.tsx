@@ -19,7 +19,7 @@ const audiogamedashboard = new URL(
   import.meta.url
 ).href;
 const audiolanding = new URL(
-  './assets/audio/003 - Welcome to the World of Pokémon!.mp3',
+  './assets/audio/welcome-pokemon.mp3',
   import.meta.url
 ).href;
 
