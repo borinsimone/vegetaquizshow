@@ -12,8 +12,16 @@ import ImageGame from './pages/game/image/ImageGame';
 import { useEffect, useState, createContext, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { FaVolumeUp, FaVolumeMute, FaVolumeDown } from 'react-icons/fa';
-import audiogamedashboard from './assets/audio/Pokemon Mystery Dungeon Red_Blue Rescue Team Full OST [6EHwdMQj3i4_00_00_00_00_05_00_part].mp3';
-import audiolanding from './assets/audio/003 - Welcome to the World of Pokémon!.mp3';
+// import audiogamedashboard from './assets/audio/Pokemon Mystery Dungeon Red_Blue Rescue Team Full OST [6EHwdMQj3i4_00_00_00_00_05_00_part].mp3';
+// import audiolanding from './assets/audio/003 - Welcome to the World of Pokémon!.mp3';
+const audiogamedashboard = new URL(
+  './assets/audio/Pokemon Mystery Dungeon Red_Blue Rescue Team Full OST [6EHwdMQj3i4_00_00_00_00_05_00_part].mp3',
+  import.meta.url
+).href;
+const audiolanding = new URL(
+  './assets/audio/003 - Welcome to the World of Pokémon!.mp3',
+  import.meta.url
+).href;
 
 // Define the audio mapping for different routes
 const AUDIO_MAPPING = {
