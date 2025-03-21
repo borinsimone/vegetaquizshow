@@ -189,7 +189,7 @@ const AudioController = () => {
 
 const App = () => {
   return (
-    <Router>
+    <Router basename='/vegetaquizshow'>
       <AudioController />
       <Routes>
         <Route
