@@ -11,8 +11,10 @@ import {
   FaTrophy,
   FaEdit,
   FaUserAlt,
+  FaHatWizard,
 } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+import { useGlobalContext } from '../../context/GlobalContext';
 
 interface Player {
   id: string;
@@ -31,28 +33,15 @@ interface GameOption {
 }
 
 function Game() {
-  const [players, setPlayers] = useState<Player[]>([]);
   const navigate = useNavigate();
+  const { players, updatePlayerScore } = useGlobalContext();
 
   useEffect(() => {
-    // Recupera i giocatori dal localStorage
-    const savedPlayers = localStorage.getItem('quizPlayers');
-    if (savedPlayers) {
-      setPlayers(JSON.parse(savedPlayers));
-    } else {
-      // Se non ci sono giocatori, torna alla landing page
+    // Se non ci sono giocatori, torna alla landing page
+    if (players.length === 0) {
       navigate('/');
     }
-  }, [navigate]);
-
-  // Aggiorna il punteggio di un giocatore
-  const updatePlayerScore = (playerId: string, newScore: number) => {
-    const updatedPlayers = players.map((player) =>
-      player.id === playerId ? { ...player, score: newScore } : player
-    );
-    setPlayers(updatedPlayers);
-    localStorage.setItem('quizPlayers', JSON.stringify(updatedPlayers));
-  };
+  }, [navigate, players]);
 
   // Opzioni di gioco disponibili
   const gameOptions: GameOption[] = [
@@ -140,32 +129,17 @@ function Game() {
         <PlayerList>
           {players.map((player) => (
             <PlayerCard key={player.id}>
-              <PlayerAvatar
-                src={player.avatar}
-                alt={player.name}
-              />
-              <PlayerInfo>
-                <PlayerName>{player.name}</PlayerName>
-                <PlayerScore
-                  onClick={() => {
-                    const newScore = prompt(
-                      `Modifica punteggio per ${player.name}:`,
-                      String(player.score)
-                    );
-                    if (newScore !== null) {
-                      const score = parseInt(newScore);
-                      if (!isNaN(score)) {
-                        updatePlayerScore(player.id, score);
-                      }
-                    }
-                  }}
-                >
-                  <BadgeIcon /> {player.score} punti{' '}
-                  <EditIcon>
-                    <FaEdit />
-                  </EditIcon>
-                </PlayerScore>
-              </PlayerInfo>
+              <PlayerAvatarContainer>
+                <PlayerAvatarImage
+                  src={player.avatar}
+                  alt={player.name}
+                />
+              </PlayerAvatarContainer>
+              <PlayerName>{player.name}</PlayerName>
+
+              <TrainerBadge>
+                <FaHatWizard />
+              </TrainerBadge>
             </PlayerCard>
           ))}
         </PlayerList>
@@ -710,4 +684,48 @@ const EditIcon = styled.span`
   ${PlayerScore}:hover & {
     opacity: 1;
   }
+`;
+const PlayerAvatarContainer = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  padding: 3px;
+  margin-right: 1rem;
+  border: 3px solid #ffde00;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #132a57 0%, #233975 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  /* Effetto hover per evidenziare l'animazione */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  ${PlayerCard}:hover & {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+`;
+const TrainerBadge = styled.div`
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 1rem;
+  color: #ffde00;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+
+  ${PlayerCard}:hover & {
+    opacity: 1;
+    transform: rotate(15deg);
+  }
+`;
+const PlayerAvatarImage = styled.img`
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  display: block;
 `;

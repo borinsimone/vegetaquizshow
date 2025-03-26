@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaUserPlus, FaGamepad, FaTimes, FaHatWizard } from 'react-icons/fa';
 import { GiPokecog } from 'react-icons/gi';
 import bg from '../../assets/images/vegetaball.webp';
+import { useGlobalContext } from '../../context/GlobalContext';
 interface Player {
   id: string;
   name: string;
@@ -12,32 +13,50 @@ interface Player {
 }
 
 const Landing = () => {
-  const [players, setPlayers] = useState<Player[]>([]);
+  const { players, addPlayer } = useGlobalContext();
+  // Stati locali solo per il form
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [playerName, setPlayerName] = useState('');
-  const [playerAvatar, setPlayerAvatar] = useState('');
+  const [pokemonName, setPokemonName] = useState('');
+  const [previewUrl, setPreviewUrl] = useState('');
   const navigate = useNavigate();
-
-  const handleAddPlayer = () => {
-    if (playerName.trim()) {
-      const newPlayer: Player = {
-        id: Date.now().toString(),
-        name: playerName.trim(),
-        avatar:
-          playerAvatar ||
-          `https://api.dicebear.com/7.x/bottts/svg?seed=${Date.now()}`,
-        score: 0,
-      };
-
-      setPlayers([...players, newPlayer]);
-      setPlayerName('');
-      setPlayerAvatar('');
-      setIsModalOpen(false);
-    }
+  // Funzione per generare l'URL dell'avatar Pokémon
+  const getPokemonAvatarUrl = (name: string) => {
+    if (!name) return '';
+    // Converti il nome in lowercase e rimuovi spazi o caratteri speciali
+    const formattedName = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]/g, '');
+    return `https://play.pokemonshowdown.com/sprites/xyani/${formattedName}.gif`;
   };
 
-  const handleRemovePlayer = (id: string) => {
-    setPlayers(players.filter((player) => player.id !== id));
+  // Mostra l'anteprima quando l'utente digita un nome di Pokémon
+  const handlePokemonNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPokemonName = e.target.value;
+    setPokemonName(newPokemonName);
+    setPreviewUrl(getPokemonAvatarUrl(newPokemonName));
+  };
+  const handleAddPlayer = () => {
+    if (playerName.trim()) {
+      // Determina l'avatar
+      const avatarUrl = pokemonName.trim()
+        ? getPokemonAvatarUrl(pokemonName)
+        : `https://api.dicebear.com/7.x/bottts/svg?seed=${Date.now()}`;
+
+      // Aggiungi il player usando la funzione dal context
+      addPlayer({
+        name: playerName.trim(),
+        avatar: avatarUrl,
+        score: 0,
+      });
+
+      // Resetta il form
+      setPlayerName('');
+      setPokemonName('');
+      setPreviewUrl('');
+      setIsModalOpen(false);
+    }
   };
 
   const handleStartGame = () => {
@@ -58,7 +77,6 @@ const Landing = () => {
         <TitleSpan>QUIZ</TitleSpan>
         <TitleSpan>SHOW</TitleSpan>
       </QuizTitle>
-
       <ButtonsContainer>
         <ActionButton
           onClick={() => setIsModalOpen(true)}
@@ -98,7 +116,6 @@ const Landing = () => {
             </PlayerCount>
           )}
         </PlayersHeader>
-
         {players.length === 0 ? (
           <EmptyPlayersList>
             <EmptyMessage>Nessun allenatore registrato</EmptyMessage>
@@ -111,10 +128,12 @@ const Landing = () => {
           <PlayersList>
             {players.map((player) => (
               <PlayerCard key={player.id}>
-                <PlayerAvatar
-                  src={player.avatar}
-                  alt={player.name}
-                />
+                <PlayerAvatarContainer>
+                  <PlayerAvatarImage
+                    src={player.avatar}
+                    alt={player.name}
+                  />
+                </PlayerAvatarContainer>
                 <PlayerName>{player.name}</PlayerName>
                 <RemovePlayerButton
                   onClick={() => handleRemovePlayer(player.id)}
@@ -129,7 +148,6 @@ const Landing = () => {
           </PlayersList>
         )}
       </PlayersContainer>
-
       {isModalOpen && (
         <ModalOverlay>
           <Modal>
@@ -152,16 +170,28 @@ const Landing = () => {
               </FormGroup>
 
               <FormGroup>
-                <Label>URL Avatar (opzionale)</Label>
+                <Label>Nome Pokémon</Label>
                 <Input
                   type='text'
-                  value={playerAvatar}
-                  onChange={(e) => setPlayerAvatar(e.target.value)}
-                  placeholder='URL immagine avatar'
+                  value={pokemonName}
+                  onChange={handlePokemonNameChange}
+                  placeholder='Inserisci il nome di un Pokémon (es. pikachu, charizard)'
                 />
                 <FormHelp>
-                  Se lasci vuoto, verrà generato automaticamente
+                  Inserisci il nome di un Pokémon per utilizzarlo come avatar
                 </FormHelp>
+
+                {previewUrl && (
+                  <AvatarPreviewContainer>
+                    <AvatarPreview>
+                      <AvatarPreviewImage
+                        src={previewUrl}
+                        alt='Anteprima Avatar'
+                      />
+                    </AvatarPreview>
+                    <PreviewLabel>Anteprima Avatar</PreviewLabel>
+                  </AvatarPreviewContainer>
+                )}
               </FormGroup>
 
               <ModalButtons>
@@ -174,7 +204,6 @@ const Landing = () => {
           </Modal>
         </ModalOverlay>
       )}
-
       <BackgroundElements>
         <PokeBallBg className='ball1' />
         <PokeBallBg className='ball2' />
@@ -663,15 +692,25 @@ const TrainerBadge = styled.div`
 `;
 
 const PlayerAvatar = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  object-fit: cover;
+  padding: 3px;
+  object-fit: contain;
   margin-right: 1rem;
   border: 3px solid #ffde00;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 1;
+  background: linear-gradient(135deg, #132a57 0%, #233975 100%);
+
+  /* Effetto hover per evidenziare l'animazione */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  ${PlayerCard}:hover & {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
 `;
 
 const PlayerName = styled.h3`
@@ -904,4 +943,90 @@ const SubmitButton = styled.button`
     transform: translateY(0);
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
   }
+`;
+const AvatarPreviewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+`;
+
+// const AvatarPreview = styled.div`
+//   width: 80px;
+//   height: 80px;
+//   border-radius: 50%;
+//   background: rgba(0, 0, 0, 0.2);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   overflow: hidden;
+//   border: 3px solid #ffde00;
+//   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+//   margin-bottom: 8px;
+
+//   img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: contain;
+//   }
+// `;
+
+const PreviewLabel = styled.span`
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+`;
+// Modifica questi componenti styled
+
+// Contenitore dell'avatar
+const PlayerAvatarContainer = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  padding: 3px;
+  margin-right: 1rem;
+  border: 3px solid #ffde00;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #132a57 0%, #233975 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  /* Effetto hover per evidenziare l'animazione */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  ${PlayerCard}:hover & {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+`;
+
+// Immagine vera e propria dell'avatar
+const PlayerAvatarImage = styled.img`
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  display: block;
+`;
+const AvatarPreview = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid #ffde00;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 8px;
+`;
+
+const AvatarPreviewImage = styled.img`
+  width: 95%;
+  height: 95%;
+  object-fit: contain;
+  display: block;
 `;
