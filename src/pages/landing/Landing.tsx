@@ -13,7 +13,7 @@ interface Player {
 }
 
 const Landing = () => {
-  const { players, addPlayer } = useGlobalContext();
+  const { players, addPlayer, removePlayer } = useGlobalContext();
   // Stati locali solo per il form
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [playerName, setPlayerName] = useState('');
@@ -68,6 +68,9 @@ const Landing = () => {
     // Store players in localStorage or context
     localStorage.setItem('quizPlayers', JSON.stringify(players));
     navigate('/game'); // Navigate to game page
+  };
+  const handleRemovePlayer = (id: string) => {
+    removePlayer(id);
   };
 
   return (
