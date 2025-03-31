@@ -86,7 +86,45 @@ function Game() {
       path: '/game/pokemon',
     },
   ];
+  <PlayerList>
+    {players.map((player) => (
+      <PlayerCard key={player.id}>
+        <PlayerAvatarContainer>
+          <PlayerAvatarImage
+            src={player.avatar}
+            alt={player.name}
+          />
+        </PlayerAvatarContainer>
+        <PlayerInfo>
+          <PlayerName>{player.name}</PlayerName>
+          <PlayerScore>
+            <BadgeIcon /> {player.score} punti
+          </PlayerScore>
+        </PlayerInfo>
+        <TrainerBadge>
+          <FaHatWizard />
+        </TrainerBadge>
+      </PlayerCard>
+    ))}
+  </PlayerList>;
+  const handleScoreEdit = (player) => {
+    const newScore = prompt(
+      `Modifica il punteggio per ${player.name}:`,
+      player.score.toString()
+    );
 
+    // Verifica che sia stato inserito un valore e che sia un numero
+    if (newScore !== null) {
+      const parsedScore = parseInt(newScore, 10);
+
+      if (!isNaN(parsedScore)) {
+        // Aggiorna il punteggio utilizzando la funzione del context
+        updatePlayerScore(player.id, parsedScore);
+      } else {
+        alert('Inserisci un numero valido.');
+      }
+    }
+  };
   return (
     <GameContainer>
       <BackButton to='/'>
@@ -135,8 +173,15 @@ function Game() {
                   alt={player.name}
                 />
               </PlayerAvatarContainer>
-              <PlayerName>{player.name}</PlayerName>
-
+              <PlayerInfo>
+                <PlayerName>{player.name}</PlayerName>
+                <PlayerScore onClick={() => handleScoreEdit(player)}>
+                  <BadgeIcon /> {player.score} punti
+                  <EditIcon>
+                    <FaEdit />
+                  </EditIcon>
+                </PlayerScore>
+              </PlayerInfo>
               <TrainerBadge>
                 <FaHatWizard />
               </TrainerBadge>
@@ -670,6 +715,7 @@ const PlayerScore = styled.div`
   transition: all 0.2s ease;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 
+  width: fit-content;
   &:hover {
     color: white;
   }

@@ -17,6 +17,9 @@ import {
   FaVolumeDown,
   FaMousePointer,
 } from 'react-icons/fa';
+import GuessPage from './pages/game/image/GuessPage';
+import City from './pages/game/wheel/City';
+import Sound from './pages/game/wheel/Sound';
 // import audiogamedashboard from './assets/audio/Pokemon Mystery Dungeon Red_Blue Rescue Team Full OST [6EHwdMQj3i4_00_00_00_00_05_00_part].mp3';
 // import audiolanding from './assets/audio/003 - Welcome to the World of Pokémon!.mp3';
 const audiogamedashboard = new URL(
@@ -315,8 +318,20 @@ const App = () => {
           element={<Wheel />}
         />
         <Route
+          path='/game/wheel/city'
+          element={<City />}
+        />
+        <Route
+          path='/game/wheel/sound'
+          element={<Sound />}
+        />
+        <Route
           path='/game/image'
           element={<ImageGame />}
+        />
+        <Route
+          path='/game/image/guess'
+          element={<GuessPage />}
         />
       </Routes>
     </Router>

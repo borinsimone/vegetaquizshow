@@ -108,6 +108,13 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     }
   };
 
+  // Aggiungi questo stato
+  const [guessedCards, setGuessedCards] = useState<number[]>([]);
+
+  // Aggiungi questa funzione
+  const markCardAsGuessed = (cardId: number) => {
+    setGuessedCards((prev) => [...prev, cardId]);
+  };
   const value = {
     score,
     setScore,
@@ -122,6 +129,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     updatePlayerScore,
     activePlayer,
     setActivePlayer,
+    guessedCards, // Aggiunto
+    markCardAsGuessed,
   };
 
   return (

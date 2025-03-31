@@ -3,13 +3,14 @@ import styled, { keyframes, css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
   FaArrowLeft,
-  FaTrophy,
   FaEye,
   FaCheck,
   FaTimes,
   FaUserAlt,
+  FaHistory,
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MdClose } from 'react-icons/md';
 
 interface Player {
   id: string;
@@ -19,6 +20,8 @@ interface Player {
 }
 
 interface Question {
+  id: string; // Aggiungi questo campo
+
   question: string;
   answer: string;
   points: number;
@@ -47,70 +50,72 @@ const CategoriesGame = () => {
       color: '#EE1515', // Colore rosso Pokeball
       questions: [
         {
-          question: 'Qual è stato il primo Pokémon disegnato da Game Freak?',
-          answer: 'Rhydon',
+          question: "L'Adamo dei pokemon per gamefreak",
+          answer: 'Rhydon è stato il primo pokemon disegnato',
           points: 100,
           answered: false,
         },
         {
-          question: 'Quante varianti di macchie può avere Spinda?',
-          answer: '4 miliardi',
+          question:
+            "Charizard può anche ottenere una variante ogni anno, ma c'è chi ne possiede 4 miliardi",
+          answer: 'Possibili varianti delle macchie di Spinda',
           points: 200,
           answered: false,
         },
         {
-          question: 'Quale Pokémon si dice sia stato un umano in vita passata?',
-          answer: 'Yamask',
+          question: 'Se proprio devo morire che almeno diventi un pokemon',
+          answer:
+            'Yamask si dice che sia stato un umano divenuto pokemon dopo la morte e che la maschera sia il ricordo della vita passata',
           points: 300,
           answered: false,
         },
         {
-          question: 'Quale Pokémon si dice possa essere Mew di notte?',
-          answer: 'Smeargle',
+          question: 'Roma di notte e di notte Roma, Mew di giorno e di notte…',
+          answer:
+            ' Smergle, fra le varie leggende legate a loro due esiste una che dice che Smergle sia Mew di notte',
           points: 400,
           answered: false,
         },
         {
           question:
-            'Quale errore di ortografia famoso è apparso in Pokémon GO?',
-          answer: 'Pikahcu (invece di Pikachu)',
+            "Sebbene sia la mascotte, c'è ancora chi non sa scrivere il suo nome",
+          answer: 'Errore del nome Pikachu in Pokemon Go (Pikahcu)',
           points: 500,
           answered: false,
         },
       ],
     },
     {
-      name: 'Pokémon Specifici',
+      name: 'Pokémon',
       color: '#3B4CCA', // Colore blu Pokémon logo
       questions: [
         {
-          question: 'Quale Pokémon è noto per non poter mai guardare a nord?',
+          question: 'Impossibile andare oltre',
           answer: 'Nosepass',
           points: 100,
           answered: false,
         },
         {
-          question:
-            "Quale Pokémon è considerato la versione 'economica' di Chimchar?",
+          question: 'Bello Chimchar, sì, finché non ti arriva da Wish',
           answer: 'Pansear',
           points: 200,
           answered: false,
         },
         {
-          question: 'Quale Pokémon potrebbe essere associato a Bud Spencer?',
+          question: 'Il pokemon preferito di Bud Spencer',
           answer: 'Hippowdon',
           points: 300,
           answered: false,
         },
         {
           question:
-            'Quale Pokémon acquatico ha un nome che suggerisce freddezza emotiva?',
+            'Dovrei essere meno emotivo, sono tentato a diventare più freddo',
           answer: 'Tentacool',
           points: 400,
           answered: false,
         },
         {
-          question: 'Quale Pokémon ha le lancette di un orologio sul corpo?',
+          question: 'Sono le 11:05 o le 12:55?',
           answer: 'Hoothoot',
           points: 500,
           answered: false,
@@ -122,34 +127,33 @@ const CategoriesGame = () => {
       color: '#FFDE00', // Colore giallo Pokémon logo
       questions: [
         {
-          question:
-            "Quale tipo di allenatore dice spesso 'C'è solo un capitano'?",
+          question: "C'è solo un capitano",
           answer: 'Marinaio',
           points: 100,
           answered: false,
         },
         {
-          question:
-            'Quale tipo di allenatore è associato a strumenti musicali?',
+          question: 'Conoscevo questo allenatore ma poi mi sono scordato ',
           answer: 'Chitarrista',
           points: 200,
           answered: false,
         },
         {
-          question: 'Quale tipo di allenatore usa tattiche furtive?',
+          question:
+            'Quanto era bello fargli il culo dopo che ti prendeva un coccolone?',
           answer: 'Ninja',
           points: 300,
           answered: false,
         },
         {
-          question: 'Quale tipo di allenatore è calvo e muscoloso?',
+          question: 'Il potere è pelato e a quanto pare anche muscoloso',
           answer: 'ZuccaPelata',
           points: 400,
           answered: false,
         },
         {
           question:
-            'Quale tipo di allenatore è noto per il suo abbigliamento minimal?',
+            '+10 punti se sale sul campo da battaglia con i capezzoli di fuori?',
           answer: 'Fantallenatore',
           points: 500,
           answered: false,
@@ -168,28 +172,28 @@ const CategoriesGame = () => {
           answered: false,
         },
         {
-          question:
-            'Qual è il valore di ritirata più alto mai stampato su una carta?',
-          answer: '5 energie',
+          question: 'Quanti sono i tipi presenti nel GCC?',
+          answer: '11',
           points: 200,
           answered: false,
         },
         {
-          question: 'In che anno è stato rilasciato il primo Set Base?',
-          answer: '1996 in Giappone, 1999 nel resto del mondo',
+          question:
+            'Qual è il valore di ritirata più alto mai stampato su una carta?',
+          answer: '5 energie',
           points: 300,
           answered: false,
         },
         {
-          question:
-            "C'è un limite massimo di carte in mano durante una partita ufficiale?",
-          answer: "No, ma se non puoi pescare all'inizio del turno perdi",
+          question: 'Quanti sono i PS massimi mai stampati su una carta?',
+          answer: '340',
           points: 400,
           answered: false,
         },
         {
-          question: 'Come si chiama la meccanica di Reshiram & Charizard GX?',
-          answer: 'Tag Team GX',
+          question:
+            'Qual è il primo set di carte e quando è stato rilasciato? (giappone/italia)',
+          answer: 'Set Base nel 1996/2000',
           points: 500,
           answered: false,
         },
@@ -200,32 +204,35 @@ const CategoriesGame = () => {
       color: '#78C850', // Verde dell'energia erba
       questions: [
         {
-          question: 'Chi è il protagonista della prima serie animata Pokémon?',
-          answer: 'Ash Ketchum',
+          question:
+            'Quale pokemon era famoso per portare sempre con se un paio di occhiali neri?',
+          answer: 'Squirtle',
           points: 100,
           answered: false,
         },
         {
-          question: 'Quale Pokémon leggendario appare nel primo film?',
-          answer: 'Mewtwo',
+          question:
+            'Quale Pokémon leggendario appare nel primo film? (fino a 5 gen)',
+          answer: 'Misty - Brock - Spighetto - (Iris)',
           points: 200,
           answered: false,
         },
         {
-          question: 'Come si chiamano i nemici ricorrenti nella serie animata?',
-          answer: 'Team Rocket (Jessie, James e Meowth)',
+          question: 'In quale anno è uscita la prima serie pokemon in Italia?',
+          answer: 'Nel 2000',
           points: 300,
           answered: false,
         },
         {
-          question: 'Quante stagioni ha la serie animata originale?',
-          answer: '23 stagioni (fino a Pokémon Esplorazioni)',
+          question: 'Chi sono i pokemon starter full evolved avuti da ash?',
+          answer:
+            'Charizard - Sceptile - Torterra - Infernape - Incineroar - Greninja -',
           points: 400,
           answered: false,
         },
         {
-          question: 'Chi è il successore di Ash come protagonista?',
-          answer: 'Liko e Roy',
+          question: 'Quanti sono i lungometraggi della serie pokemon?',
+          answer: '22 ',
           points: 500,
           answered: false,
         },
@@ -242,6 +249,24 @@ const CategoriesGame = () => {
       if (parsedPlayers.length > 0) {
         setActivePlayer(parsedPlayers[0]);
       }
+    }
+
+    // Recupera le categorie salvate o genera nuove categorie con ID
+    const savedCategories = localStorage.getItem('quizCategories');
+    if (savedCategories) {
+      setCategories(JSON.parse(savedCategories));
+    } else {
+      // Se non ci sono categorie salvate, genera ID univoci per ogni domanda
+      const categoriesWithIds = categories.map((category) => ({
+        ...category,
+        questions: category.questions.map((question) => ({
+          ...question,
+          id: `${category.name}-${question.points}-${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
+        })),
+      }));
+      setCategories(categoriesWithIds);
     }
   }, []);
 
@@ -260,17 +285,19 @@ const CategoriesGame = () => {
     setShowAnswer(false);
   };
 
+  // E poi modifica la funzione markQuestionAsAnswered per usare l'ID
   const markQuestionAsAnswered = (questionToMark: Question) => {
-    setCategories(
-      categories.map((category) => ({
-        ...category,
-        questions: category.questions.map((question) =>
-          question === questionToMark
-            ? { ...question, answered: true }
-            : question
-        ),
-      }))
-    );
+    const updatedCategories = categories.map((category) => ({
+      ...category,
+      questions: category.questions.map((question) =>
+        question.id === questionToMark.id
+          ? { ...question, answered: true }
+          : question
+      ),
+    }));
+
+    setCategories(updatedCategories);
+    localStorage.setItem('quizCategories', JSON.stringify(updatedCategories));
   };
 
   const handleCorrectAnswer = () => {
@@ -308,9 +335,24 @@ const CategoriesGame = () => {
     // Chiudi la domanda
     setCurrentQuestion(null);
   };
+  // Aggiungi anche questa nuova funzione per resettare le domande (opzionale)
+  const resetQuizQuestions = () => {
+    const resetCategories = categories.map((category) => ({
+      ...category,
+      questions: category.questions.map((question) => ({
+        ...question,
+        answered: false,
+      })),
+    }));
 
+    setCategories(resetCategories);
+    localStorage.setItem('quizCategories', JSON.stringify(resetCategories));
+  };
   return (
     <GameContainer>
+      <ResetButton onClick={resetQuizQuestions}>
+        <FaHistory /> Reset Quiz
+      </ResetButton>
       <BackButton to='/game'>
         <FaArrowLeft /> Torna ai giochi
       </BackButton>
@@ -409,6 +451,28 @@ const CategoriesGame = () => {
               exit={{ scale: 0.8, opacity: 0 }}
               $color={currentQuestion.categoryColor}
             >
+              <MdClose
+                size='30px'
+                color='red'
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '50% ',
+                  transform: 'translateX(50%)',
+                  cursor: 'pointer',
+                  backgroundColor: '#d9d9d940',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '5px',
+                  zIndex: 10,
+                }}
+                onClick={() => {
+                  setCurrentQuestion(null);
+                  setShowAnswer(false);
+                }}
+              />
               <ModalHeader>
                 <CategoryBadge $color={currentQuestion.categoryColor}>
                   {currentQuestion.category}
@@ -481,7 +545,7 @@ export default CategoriesGame;
 // Animations
 const float = keyframes`
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
+  50% { transform: translateY(-100px) rotate(5deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 `;
 
@@ -517,28 +581,19 @@ const GameContainer = styled.div`
   background: #233975;
   color: white;
   position: relative;
-  overflow: hidden;
-  font-family: 'Pokemon Solid', 'Montserrat', sans-serif;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
+  font-family: 'Pokemon Solid', 'Montserrat', sans-serif;
 `;
 
 const BackgroundElements = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
   overflow: hidden;
+  background-color: #233975;
 `;
 
 const PokeBallBg = styled.div`
@@ -636,7 +691,7 @@ const MasterBallBg = styled(PokeBallBg)`
 `;
 
 const BackButton = styled(Link)`
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
   display: flex;
@@ -682,7 +737,7 @@ const JeopardyBoard = styled.div`
   flex-direction: column;
   background: rgba(19, 42, 87, 0.9);
   border-radius: 16px;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   z-index: 1;
   border: 4px solid #ffde00;
@@ -1295,4 +1350,31 @@ const PlayerIndicator = styled.div`
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
   z-index: 10;
   border: 2px solid white;
+`;
+const ResetButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(238, 21, 21, 0.8);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    background: #ee1515;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 `;

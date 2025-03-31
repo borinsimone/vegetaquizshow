@@ -1,0 +1,191 @@
+[
+    {
+      name: 'Curiosità Pokémon',
+      color: '#EE1515', // Colore rosso Pokeball
+      questions: [
+        {
+          question: 'L'Adamo dei pokemon per gamefreak',
+          answer: 'Rhydon è stato il primo pokemon disegnato',
+          points: 100,
+          answered: false,
+        },
+        {
+          question: 'Charizard può anche ottenere una variante ogni anno, ma c'è chi ne possiede 4 miliardi',
+          answer: 'Possibili varianti delle macchie di Spinda',
+          points: 200,
+          answered: false,
+        },
+        {
+          question: 'Se proprio devo morire che almeno diventi un pokemon',
+          answer: 'Yamask si dice che sia stato un umano divenuto pokemon dopo la morte e che la maschera sia il ricordo della vita passata',
+          points: 300,
+          answered: false,
+        },
+        {
+          question: 'Roma di notte e di notte Roma, Mew di giorno e di notte…',
+          answer: ' Smergle, fra le varie leggende legate a loro due esiste una che dice che Smergle sia Mew di notte',
+          points: 400,
+          answered: false,
+        },
+        {
+          question:
+            'Sebbene sia la mascotte, c'è ancora chi non sa scrivere il suo nome',
+          answer: 'Errore del nome Pikachu in Pokemon Go (Pikahcu)',
+          points: 500,
+          answered: false,
+        },
+      ],
+    },
+    {
+      name: 'Pokémon',
+      color: '#3B4CCA', // Colore blu Pokémon logo
+      questions: [
+        {
+          question: 'Impossibile andare oltre',
+          answer: 'Nosepass',
+          points: 100,
+          answered: false,
+        },
+        {
+          question:
+            "Bello Chimchar, sì, finché non ti arriva da Wish",
+          answer: 'Pansear',
+          points: 200,
+          answered: false,
+        },
+        {
+          question: 'Il pokemon preferito di Bud Spencer',
+          answer: 'Hippowdon',
+          points: 300,
+          answered: false,
+        },
+        {
+          question:
+            'Dovrei essere meno emotivo, sono tentato a diventare più freddo',
+          answer: 'Tentacool',
+          points: 400,
+          answered: false,
+        },
+        {
+          question: 'Sono le 11:05 o le 12:55?',
+          answer: 'Hoothoot',
+          points: 500,
+          answered: false,
+        },
+      ],
+    },
+    {
+      name: 'Allenatori',
+      color: '#FFDE00', // Colore giallo Pokémon logo
+      questions: [
+        {
+          question:
+            "C'è solo un capitano",
+          answer: 'Marinaio',
+          points: 100,
+          answered: false,
+        },
+        {
+          question:
+            'Conoscevo questo allenatore ma poi mi sono scordato ',
+          answer: 'Chitarrista',
+          points: 200,
+          answered: false,
+        },
+        {
+          question: 'Quanto era bello fargli il culo dopo che ti prendeva un coccolone?',
+          answer: 'Ninja',
+          points: 300,
+          answered: false,
+        },
+        {
+          question: 'Il potere è pelato e a quanto pare anche muscoloso',
+          answer: 'ZuccaPelata',
+          points: 400,
+          answered: false,
+        },
+        {
+          question:
+            '+10 punti se sale sul campo da battaglia con i capezzoli di fuori?',
+          answer: 'Fantallenatore',
+          points: 500,
+          answered: false,
+        },
+      ],
+    },
+    {
+      name: 'GCC Pokémon',
+      color: '#FF9C54', // Arancione per carte Fire
+      questions: [
+        {
+          question:
+            "Quante carte si pescano all'inizio di una partita nel GCC Pokémon?",
+          answer: '7',
+          points: 100,
+          answered: false,
+        },
+        {
+          question:
+            'Quanti sono i tipi presenti nel GCC?',
+          answer: '11',
+          points: 200,
+          answered: false,
+        },
+        {
+          question: 'Qual è il valore di ritirata più alto mai stampato su una carta?',
+          answer: '5 energie',
+          points: 300,
+          answered: false,
+        },
+        {
+          question:
+            "Quanti sono i PS massimi mai stampati su una carta?",
+          answer: "340",
+          points: 400,
+          answered: false,
+        },
+        {
+          question: 'Qual è il primo set di carte e quando è stato rilasciato? (giappone/italia)',
+          answer: 'Set Base nel 1996/2000',
+          points: 500,
+          answered: false,
+        },
+      ],
+    },
+    {
+      name: 'Serie Pokémon',
+      color: '#78C850', // Verde dell'energia erba
+      questions: [
+        {
+          question: 'Quale pokemon era famoso per portare sempre con se un paio di occhiali neri?',
+          answer: 'Squirtle',
+          points: 100,
+          answered: false,
+        },
+        {
+          question: 'Quale Pokémon leggendario appare nel primo film? (fino a 5 gen)',
+          answer: 'Misty - Brock - Spighetto - (Iris)',
+          points: 200,
+          answered: false,
+        },
+        {
+          question: 'In quale anno è uscita la prima serie pokemon in Italia?',
+          answer: 'Nel 2000',
+          points: 300,
+          answered: false,
+        },
+        {
+          question: 'Chi sono i pokemon starter full evolved avuti da ash?',
+          answer: 'Charizard - Sceptile - Torterra - Infernape - Incineroar - Greninja -',
+          points: 400,
+          answered: false,
+        },
+        {
+          question: 'Quanti sono i lungometraggi della serie pokemon?',
+          answer: '22 ',
+          points: 500,
+          answered: false,
+        },
+      ],
+    },
+  ]
