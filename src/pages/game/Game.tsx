@@ -12,6 +12,7 @@ import {
   FaEdit,
   FaUserAlt,
   FaHatWizard,
+  FaCity,
 } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useGlobalContext } from '../../context/GlobalContext';
@@ -58,7 +59,7 @@ function Game() {
       title: 'Ruota della Fortuna',
       description: 'Gira la ruota e affronta sfide casuali',
       icon: <FaDice />,
-      color: '#3B4CCA', // Blu Pokémon
+      color: '#3bcaca', // Blu Pokémon
       path: '/game/wheel',
     },
     {
@@ -70,12 +71,12 @@ function Game() {
       path: '/game/image',
     },
     {
-      id: 'fusion',
-      title: 'Fusioni Pokémon',
-      description: 'Indovina quali Pokémon creano una fusione',
-      icon: <FaAtom />,
-      color: '#9966FF', // Viola Pokémon
-      path: '/game/fusion',
+      id: 'city',
+      title: 'Citta Pokémon',
+      description: 'Indovina la città Pokémon da un indizio',
+      icon: <FaCity />,
+      color: '#f066ff', // Viola Pokémon
+      path: '/game/city',
     },
     {
       id: 'pokemon',

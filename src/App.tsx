@@ -18,8 +18,10 @@ import {
   FaMousePointer,
 } from 'react-icons/fa';
 import GuessPage from './pages/game/image/GuessPage';
-import City from './pages/game/wheel/City';
+
 import Sound from './pages/game/wheel/Sound';
+import Fusion from './pages/game/wheel/Fusion';
+import City from './pages/game/city/City';
 // import audiogamedashboard from './assets/audio/Pokemon Mystery Dungeon Red_Blue Rescue Team Full OST [6EHwdMQj3i4_00_00_00_00_05_00_part].mp3';
 // import audiolanding from './assets/audio/003 - Welcome to the World of Pokémon!.mp3';
 const audiogamedashboard = new URL(
@@ -30,15 +32,23 @@ const audiolanding = new URL(
   './assets/audio/welcome-pokemon.mp3',
   import.meta.url
 ).href;
+const imageGameAudio = new URL('./assets/audio/Contest.mp3', import.meta.url)
+  .href;
+const imageGuessAudio = new URL(
+  './assets/audio/image_guess.mp3',
+  import.meta.url
+).href;
 const clickSound = new URL('./assets/audio/abtn.mp3', import.meta.url).href;
 
 // Define the audio mapping for different routes
 const AUDIO_MAPPING = {
   '/': audiolanding,
   '/game': audiogamedashboard,
+
   // Add more route-to-audio mappings here in the future
   // '/game/wheel': wheelAudio,
-  // '/game/image': imageAudio,
+  '/game/image': imageGameAudio,
+  '/game/image/guess': imageGuessAudio,
   // etc.
 };
 
@@ -318,8 +328,8 @@ const App = () => {
           element={<Wheel />}
         />
         <Route
-          path='/game/wheel/city'
-          element={<City />}
+          path='/game/wheel/fusion'
+          element={<Fusion />}
         />
         <Route
           path='/game/wheel/sound'
@@ -332,6 +342,10 @@ const App = () => {
         <Route
           path='/game/image/guess'
           element={<GuessPage />}
+        />
+        <Route
+          path='/game/city'
+          element={<City />}
         />
       </Routes>
     </Router>

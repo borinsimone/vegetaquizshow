@@ -18,10 +18,10 @@ const WHEEL_SEGMENTS = [
 
   {
     id: 4,
-    label: 'Città',
+    label: 'Fusioni',
     color: '#4CAF50',
     points: 400,
-    url: '/game/wheel/city',
+    url: '/game/wheel/fusion',
   },
   { id: 8, label: 'Malus', color: '#000000', points: -100 },
 

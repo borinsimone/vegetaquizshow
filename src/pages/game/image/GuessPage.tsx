@@ -435,7 +435,7 @@ const ControlButton = styled.button`
 const PuzzleImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   background: white;
 `;
 
@@ -1079,12 +1079,12 @@ const PuzzleContainer = styled.div`
   position: relative;
   width: 100%;
   max-width: 400px;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 1.4;
   border-radius: 10px;
   overflow: hidden;
   border: 3px solid #ffde00;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-
+  object-fit: cover;
   @media (max-width: 900px) {
     max-width: 100%;
   }

@@ -10,6 +10,13 @@ import lopunny from './images/lopunny.jpg';
 import psyduck from './images/psyduck.jpg';
 import lucario from './images/lucario.jpg';
 import fletchling from './images/fletchling.jpg';
+import flygon from './images/flygon.jpg';
+import stoutland from './images/stoutland.jpg';
+import charizard from './images/charizard.jpg';
+import sceptile from './images/sceptile.jpg';
+import deoxys from './images/deoxys.jpg';
+import bulbasaur from './images/bulbasaur.jpg';
+
 // Lista di Pokémon per il gioco
 const POKEMON_LIST = [
   {
@@ -44,33 +51,33 @@ const POKEMON_LIST = [
   },
   {
     id: 7,
-    name: 'Gengar',
-    image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/094.png',
+    name: 'Flygon',
+    image: flygon,
   },
   {
     id: 8,
-    name: 'Eevee',
-    image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/133.png',
+    name: 'Stoutland',
+    image: stoutland,
   },
   {
     id: 9,
-    name: 'Snorlax',
-    image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/143.png',
+    name: 'Charizard',
+    image: charizard,
   },
   {
     id: 10,
-    name: 'Gyarados',
-    image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/130.png',
+    name: 'Sceptile',
+    image: sceptile,
   },
   {
     id: 11,
-    name: 'Dragonite',
-    image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/149.png',
+    name: 'Deoxys',
+    image: deoxys,
   },
   {
     id: 12,
-    name: 'Meowth',
-    image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/052.png',
+    name: 'Bulbasaur',
+    image: bulbasaur,
   },
 ];
 const cardbg = new URL('../../../assets/images/cardbg.png', import.meta.url)
