@@ -289,15 +289,27 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
-  background: none;
-  border: none;
+  background: rgba(19, 42, 87, 0.8);
   color: #ffde00;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 2px solid #ffde00;
   font-size: 1rem;
   cursor: pointer;
   z-index: 10;
+  transition: all 0.3s ease;
 
   &:hover {
-    color: white;
+    background: #3b4cca;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    top: 10px;
+    left: 10px;
   }
 `;
 
@@ -307,6 +319,18 @@ const PageTitle = styled.h1`
   text-shadow: 3px 3px 0 #3b4cca;
   margin: 2rem 0 1rem;
   text-align: center;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    text-shadow: 2px 2px 0 #3b4cca;
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+    margin-top: 4rem;
+  }
 `;
 
 const GameInstructions = styled.p`
@@ -314,6 +338,13 @@ const GameInstructions = styled.p`
   text-align: center;
   max-width: 600px;
   margin-bottom: 2rem;
+  z-index: 1;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+  }
 `;
 
 const GameContent = styled.div`
@@ -323,6 +354,10 @@ const GameContent = styled.div`
   flex-direction: column;
   align-items: center;
   z-index: 1;
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+  }
 `;
 
 const SoundSection = styled.div`
@@ -335,6 +370,14 @@ const SoundSection = styled.div`
   align-items: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 222, 0, 0.5);
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 const AudioPlayer = styled.div`
@@ -343,6 +386,11 @@ const AudioPlayer = styled.div`
   align-items: center;
   gap: 1.5rem;
   margin: 1rem 0 2rem;
+
+  @media (max-width: 480px) {
+    gap: 1rem;
+    margin: 0.5rem 0 1.5rem;
+  }
 `;
 
 const AudioButton = styled.button`
@@ -372,6 +420,11 @@ const AudioButton = styled.button`
   &:disabled {
     background: #cccccc;
     cursor: not-allowed;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px 25px;
+    font-size: 1rem;
   }
 `;
 
@@ -421,6 +474,11 @@ const GuessingArea = styled.div`
   width: 100%;
   max-width: 500px;
   margin-top: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 `;
 
 const GuessInput = styled.input`
@@ -438,6 +496,11 @@ const GuessInput = styled.input`
 
   &:disabled {
     background: #f0f0f0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 15px;
+    font-size: 0.9rem;
   }
 `;
 
@@ -463,6 +526,14 @@ const GuessButton = styled.button`
   &:disabled {
     background: #cccccc;
     cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
   }
 `;
 

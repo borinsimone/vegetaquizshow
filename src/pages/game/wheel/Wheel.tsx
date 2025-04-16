@@ -268,6 +268,10 @@ const RouletteContainer = styled.div`
   width: 80%;
   max-width: 400px;
   position: relative;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 // Mantieni il resto dei tuoi stili già definiti
@@ -411,6 +415,10 @@ const GameContainer = styled.div`
   padding: 2rem;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 const BackButton = styled(Link)`
@@ -435,6 +443,13 @@ const BackButton = styled(Link)`
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    top: 10px;
+    left: 10px;
+  }
 `;
 
 const PageTitle = styled.h1`
@@ -444,6 +459,17 @@ const PageTitle = styled.h1`
   margin-bottom: 1rem;
   text-align: center;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    text-shadow: 2px 2px 0 #3b4cca;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+    margin-top: 3rem;
+  }
 `;
 
 const GameInstructions = styled.p`
@@ -451,6 +477,12 @@ const GameInstructions = styled.p`
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 2rem;
   z-index: 1;
+  max-width: 600px;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const GameLayout = styled.div`
@@ -463,6 +495,12 @@ const GameLayout = styled.div`
 
   @media (max-width: 900px) {
     flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    margin: 1rem 0;
+    gap: 1rem;
   }
 `;
 
@@ -471,6 +509,7 @@ const WheelSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const WheelContainer = styled.div`
@@ -481,44 +520,9 @@ const WheelContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
 
-interface WheelSvgProps {
-  $rotation: number;
-  $isSpinning: boolean;
-}
-
-const WheelSvg = styled.svg<WheelSvgProps>`
-  width: 100%;
-  height: 100%;
-  transition: transform 5s cubic-bezier(0.17, 0.67, 0.2, 1);
-  transform: ${(props) => `rotate(${props.$rotation}deg)`};
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
-`;
-
-const WheelPointer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 30px solid #ee1515;
-  z-index: 2;
-  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -28px;
-    left: -10px;
-    width: 20px;
-    height: 20px;
-    background: #ffde00;
-    border-radius: 50%;
-    border: 3px solid #ee1515;
+  @media (max-width: 480px) {
+    max-width: 100%;
   }
 `;
 
@@ -554,6 +558,18 @@ const SpinButton = styled.button`
     background: #cccccc;
     cursor: not-allowed;
   }
+
+  @media (max-width: 768px) {
+    bottom: -50px;
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    bottom: -40px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
 `;
 
 interface ResultDisplayProps {
@@ -578,6 +594,11 @@ const ResultDisplay = styled.div<ResultDisplayProps>`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    max-width: 280px;
+  }
 `;
 
 const ResultTitle = styled.div`
@@ -592,6 +613,10 @@ const ResultValue = styled.div`
   color: white;
   margin-bottom: 0.5rem;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const ResultPoints = styled.div`
@@ -600,6 +625,11 @@ const ResultPoints = styled.div`
   color: #ffde00;
   margin-bottom: 1.5rem;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const ContinueButton = styled.button`
@@ -630,6 +660,14 @@ const PlayerSection = styled.div`
   padding: 1.5rem;
   border: 3px solid #ffde00;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
@@ -638,6 +676,11 @@ const SectionTitle = styled.h2`
   margin-bottom: 1.5rem;
   text-align: center;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const PlayerList = styled.div`
@@ -645,7 +688,7 @@ const PlayerList = styled.div`
   flex-direction: column;
   gap: 1rem;
   max-height: 60vh;
-  /* overflow-y: auto; */
+  overflow-y: auto;
   padding-right: 0.5rem;
 
   /* Scrollbar styling */
@@ -661,6 +704,14 @@ const PlayerList = styled.div`
   &::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
+  }
+
+  @media (max-width: 900px) {
+    max-height: 40vh;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.8rem;
   }
 `;
 
@@ -693,6 +744,10 @@ const PlayerCard = styled.div<PlayerCardProps>`
     background: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
   }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+  }
 `;
 
 const PlayerAvatar = styled.img`
@@ -704,6 +759,12 @@ const PlayerAvatar = styled.img`
   border: 2px solid #ffde00;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
   background: #132a57;
+
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+    margin-right: 0.8rem;
+  }
 `;
 
 const PlayerInfo = styled.div`
@@ -715,11 +776,19 @@ const PlayerName = styled.div`
   font-size: 1rem;
   margin-bottom: 0.2rem;
   color: white;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const PlayerScore = styled.div`
   font-size: 0.85rem;
   color: #ffde00;
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const ActiveIndicator = styled.div`

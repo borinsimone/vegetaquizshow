@@ -253,16 +253,22 @@ const GameContainer = styled.div`
     bottom: 0;
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 const BackgroundElements = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
   overflow: hidden;
+  background-color: #233975;
+  pointer-events: none;
 `;
 
 const PokeBallBg = styled.div`
@@ -279,6 +285,7 @@ const PokeBallBg = styled.div`
   );
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   opacity: 0.15;
+  pointer-events: none;
 
   &::before {
     content: '';
@@ -303,6 +310,16 @@ const PokeBallBg = styled.div`
     bottom: 10%;
     left: 5%;
     animation: ${float} 10s ease-in-out infinite reverse;
+  }
+
+  @media (max-width: 768px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100px;
+    height: 100px;
   }
 `;
 
