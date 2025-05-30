@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { FaUserPlus, FaGamepad, FaTimes, FaHatWizard } from 'react-icons/fa';
 import { GiPokecog } from 'react-icons/gi';
 import bg from '../../assets/images/vegetaball.webp';
 import { useGlobalContext } from '../../context/GlobalContext';
+
 interface Player {
   id: string;
   name: string;
@@ -20,10 +21,10 @@ const Landing = () => {
   const [pokemonName, setPokemonName] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const navigate = useNavigate();
+
   // Funzione per generare l'URL dell'avatar Pokémon
   const getPokemonAvatarUrl = (name: string) => {
     if (!name) return '';
-    // Converti il nome in lowercase e rimuovi spazi o caratteri speciali
     const formattedName = name
       .toLowerCase()
       .trim()
@@ -37,9 +38,10 @@ const Landing = () => {
     setPokemonName(newPokemonName);
     setPreviewUrl(getPokemonAvatarUrl(newPokemonName));
   };
+
   const handleAddPlayer = () => {
-    if (playerName.trim()) {
-      // Determina l'avatar
+    if (playerName.trim() && players.length < 5) {
+      // Limit to 5 players
       const avatarUrl = pokemonName.trim()
         ? getPokemonAvatarUrl(pokemonName)
         : `https://api.dicebear.com/7.x/bottts/svg?seed=${Date.now()}`;
@@ -75,87 +77,97 @@ const Landing = () => {
 
   return (
     <LandingContainer>
-      <QuizTitle>
-        <TitleSpan>VEGETA</TitleSpan>
-        <TitleSpan>QUIZ</TitleSpan>
-        <TitleSpan>SHOW</TitleSpan>
-      </QuizTitle>
-      <ButtonsContainer>
-        <ActionButton
-          onClick={() => setIsModalOpen(true)}
-          $color='#EE1515'
-        >
-          <ButtonIcon>
-            <FaUserPlus />
-          </ButtonIcon>
-          <span>Registra Allenatore</span>
-        </ActionButton>
+      <MainContent>
+        <HeaderSection>
+          <QuizTitle>
+            <TitleSpan>VEGETA</TitleSpan>
+            <TitleSpan>QUIZ</TitleSpan>
+            <TitleSpan>SHOW</TitleSpan>
+          </QuizTitle>
+        </HeaderSection>
 
-        <ActionButton
-          onClick={handleStartGame}
-          disabled={players.length === 0}
-          className={players.length === 0 ? 'disabled' : 'ready'}
-          $color='#3B4CCA'
-        >
-          <ButtonIcon>
-            <FaGamepad />
-          </ButtonIcon>
-          <span>Inizia Avventura</span>
-        </ActionButton>
-      </ButtonsContainer>
+        <CenterSection>
+          <PlayersContainer>
+            <PlayersHeader>
+              <PlayersTitle>
+                <PokeBallIcon />
+                Allenatori Registrati
+                {players.length > 0 && (
+                  <PlayerCount>{players.length}/5</PlayerCount>
+                )}
+              </PlayersTitle>
+            </PlayersHeader>
 
-      <PlayersContainer>
-        <PlayersHeader>
-          <h2>Allenatori</h2>
-          {players.length > 0 && (
-            <PlayerCount>
-              <PokeBallIcon
-                small
-                style={{
-                  transform: 'rotate(180deg)',
-                }}
-              />
-              {players.length}
-            </PlayerCount>
-          )}
-        </PlayersHeader>
-        {players.length === 0 ? (
-          <EmptyPlayersList>
-            <EmptyMessage>Nessun allenatore registrato</EmptyMessage>
-            <AddPlayerPrompt onClick={() => setIsModalOpen(true)}>
-              {/* <GiPokeballOpen style={{ marginRight: '8px' }} /> */}
-              Registra il tuo primo allenatore!
-            </AddPlayerPrompt>
-          </EmptyPlayersList>
-        ) : (
-          <PlayersList>
-            {players.map((player) => (
-              <PlayerCard key={player.id}>
-                <PlayerAvatarContainer>
-                  <PlayerAvatarImage
-                    src={player.avatar}
-                    alt={player.name}
-                  />
-                </PlayerAvatarContainer>
-                <PlayerName>{player.name}</PlayerName>
-                <RemovePlayerButton
-                  onClick={() => handleRemovePlayer(player.id)}
-                >
-                  <FaTimes />
-                </RemovePlayerButton>
-                <TrainerBadge>
-                  <FaHatWizard />
-                </TrainerBadge>
-              </PlayerCard>
-            ))}
-          </PlayersList>
-        )}
-      </PlayersContainer>
+            {players.length === 0 ? (
+              <EmptyPlayersList>
+                <EmptyMessage>Nessun allenatore nella sala</EmptyMessage>
+                <AddPlayerPrompt onClick={() => setIsModalOpen(true)}>
+                  Registra il tuo primo allenatore!
+                </AddPlayerPrompt>
+              </EmptyPlayersList>
+            ) : (
+              <PlayersList>
+                {players.map((player) => (
+                  <PlayerCard key={player.id}>
+                    <PlayerAvatarContainer>
+                      <PlayerAvatarImage
+                        src={player.avatar}
+                        alt={player.name}
+                      />
+                    </PlayerAvatarContainer>
+                    <PlayerInfo>
+                      <PlayerName>{player.name}</PlayerName>
+                      <TrainerBadge>
+                        <FaHatWizard />
+                        <span>Allenatore</span>
+                      </TrainerBadge>
+                    </PlayerInfo>
+                    <RemovePlayerButton
+                      onClick={() => handleRemovePlayer(player.id)}
+                    >
+                      <FaTimes />
+                    </RemovePlayerButton>
+                  </PlayerCard>
+                ))}
+              </PlayersList>
+            )}
+          </PlayersContainer>
+        </CenterSection>
+
+        <ActionsSection>
+          <ButtonsContainer>
+            <ActionButton
+              onClick={() => setIsModalOpen(true)}
+              disabled={players.length >= 5}
+              $color='#EE1515'
+            >
+              <ButtonIcon>
+                <FaUserPlus />
+              </ButtonIcon>
+              <span>Registra Allenatore</span>
+            </ActionButton>
+
+            <ActionButton
+              onClick={handleStartGame}
+              disabled={players.length === 0}
+              className={players.length === 0 ? 'disabled' : 'ready'}
+              $color='#3B4CCA'
+              $primary
+            >
+              <ButtonIcon>
+                <FaGamepad />
+              </ButtonIcon>
+              <span>Inizia Avventura</span>
+            </ActionButton>
+          </ButtonsContainer>
+        </ActionsSection>
+      </MainContent>
+
       {isModalOpen && (
         <ModalOverlay>
           <Modal>
             <ModalHeader>
-              <h2>Registra Allenatore</h2>
+              <h2>Registra Nuovo Allenatore</h2>
               <CloseButton onClick={() => setIsModalOpen(false)}>
                 <FaTimes />
               </CloseButton>
@@ -201,12 +213,15 @@ const Landing = () => {
                 <CancelButton onClick={() => setIsModalOpen(false)}>
                   Annulla
                 </CancelButton>
-                <SubmitButton onClick={handleAddPlayer}>Registra</SubmitButton>
+                <SubmitButton onClick={handleAddPlayer}>
+                  Registra Allenatore
+                </SubmitButton>
               </ModalButtons>
             </ModalContent>
           </Modal>
         </ModalOverlay>
       )}
+
       <BackgroundElements>
         <PokeBallBg className='ball1' />
         <PokeBallBg className='ball2' />
@@ -215,6 +230,7 @@ const Landing = () => {
         <MasterBallBg className='ball5' />
         <PatternOverlay />
       </BackgroundElements>
+
       <img
         src={bg}
         style={{
@@ -223,7 +239,6 @@ const Landing = () => {
           left: 0,
           width: '100%',
           height: '100%',
-
           opacity: 0.55,
           zIndex: 0,
           objectFit: 'cover',
@@ -248,29 +263,23 @@ const pulse = keyframes`
   100% { transform: scale(1); }
 `;
 
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+const glow = keyframes`
+  0% { box-shadow: 0 0 20px rgba(255, 222, 0, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(255, 222, 0, 0.8); }
+  100% { box-shadow: 0 0 20px rgba(255, 222, 0, 0.5); }
 `;
 
-const pokeballWiggle = keyframes`
-  0% { transform: rotate(-5deg); }
-  25% { transform: rotate(5deg); }
-  50% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
-  100% { transform: rotate(0deg); }
+const slideIn = keyframes`
+  0% { transform: translateX(-50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
 `;
 
-// Styled Components
+// Desktop-optimized layout
 const LandingContainer = styled.div`
-  width: 100%;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2rem;
-  padding-top: 10vh;
   background: #233975;
   color: white;
   position: relative;
@@ -286,6 +295,35 @@ const LandingContainer = styled.div`
     bottom: 0;
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
+`;
+
+const MainContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 3rem 4rem;
+  z-index: 1;
+`;
+
+const HeaderSection = styled.div`
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+`;
+
+const CenterSection = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+`;
+
+const ActionsSection = styled.div`
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
 `;
 
 const BackgroundElements = styled.div`
@@ -310,8 +348,8 @@ const PatternOverlay = styled.div`
 
 const PokeBallBg = styled.div`
   position: absolute;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background: linear-gradient(
     to bottom,
@@ -326,25 +364,25 @@ const PokeBallBg = styled.div`
   &::before {
     content: '';
     position: absolute;
-    width: 15px;
-    height: 15px;
+    width: 12px;
+    height: 12px;
     background: white;
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 5px #333, 0 0 0 10px white;
+    box-shadow: 0 0 0 4px #333, 0 0 0 8px white;
   }
 
   &.ball1 {
-    top: -40px;
-    right: 10%;
+    top: 10%;
+    right: 15%;
     animation: ${float} 12s ease-in-out infinite;
   }
 
   &.ball2 {
-    bottom: 10%;
-    left: 5%;
+    bottom: 15%;
+    left: 10%;
     animation: ${float} 10s ease-in-out infinite reverse;
   }
 `;
@@ -359,10 +397,10 @@ const GreatBallBg = styled(PokeBallBg)`
   );
 
   &.ball3 {
-    top: 20%;
-    right: 5%;
-    width: 100px;
-    height: 100px;
+    top: 25%;
+    right: 8%;
+    width: 90px;
+    height: 90px;
     animation: ${float} 15s ease-in-out infinite;
   }
 `;
@@ -377,10 +415,10 @@ const UltraBallBg = styled(PokeBallBg)`
   );
 
   &.ball4 {
-    bottom: 5%;
-    right: 15%;
-    width: 120px;
-    height: 120px;
+    bottom: 25%;
+    right: 12%;
+    width: 100px;
+    height: 100px;
     animation: ${float} 18s ease-in-out infinite reverse;
   }
 `;
@@ -395,7 +433,7 @@ const MasterBallBg = styled(PokeBallBg)`
   );
 
   &.ball5 {
-    top: 40%;
+    top: 45%;
     left: 8%;
     width: 80px;
     height: 80px;
@@ -404,48 +442,32 @@ const MasterBallBg = styled(PokeBallBg)`
 `;
 
 const QuizTitle = styled.h1`
-  font-size: 4.5rem;
+  font-size: 5rem;
   font-weight: 900;
   text-align: center;
-
   text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
   animation: ${pulse} 3s infinite ease-in-out;
-  z-index: 1;
   font-family: 'Pokemon Solid', 'Arial Black', sans-serif;
-
-  @media (max-width: 768px) {
-    font-size: 3rem;
-  }
+  margin: 0;
 `;
 
 const TitleSpan = styled.span`
   color: #ffde00;
-  margin: 0 0.3rem;
+  margin: 0 0.5rem;
   position: relative;
   -webkit-text-stroke: 3px #3b4cca;
   text-shadow: 4px 4px 0 #3b4cca;
-
-  @media (max-width: 768px) {
-    -webkit-text-stroke: 2px #3b4cca;
-  }
 `;
 
 const ButtonsContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  gap: 2rem;
-
-  z-index: 1;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-  }
+  justify-content: center;
+  gap: 3rem;
 `;
 
-interface ColorProps {
+interface ActionButtonProps {
   $color?: string;
+  $primary?: boolean;
 }
 
 const ButtonIcon = styled.div`
@@ -456,26 +478,33 @@ const ButtonIcon = styled.div`
   height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
-  margin-right: 10px;
-  font-size: 1.3rem;
+  margin-right: 12px;
+  font-size: 1.2rem;
 `;
 
-const ActionButton = styled.button<ColorProps>`
+const ActionButton = styled.button<ActionButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 2rem;
-  border-radius: 50px;
+  padding: 1.2rem 2.5rem;
+  border-radius: 60px;
   border: none;
   background: ${(props) => props.$color || '#EE1515'};
   color: white;
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
+  min-width: 250px;
+
+  ${(props) =>
+    props.$primary &&
+    css`
+      animation: ${glow} 2s infinite ease-in-out;
+    `}
 
   &::after {
     content: '';
@@ -484,42 +513,43 @@ const ActionButton = styled.button<ColorProps>`
     left: 0;
     width: 100%;
     height: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
   }
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 0 rgba(0, 0, 0, 0.3);
   }
 
   &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
   }
 
-  &.disabled {
+  &:disabled {
     background: #666;
-    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
     cursor: not-allowed;
+    animation: none;
 
     &:hover {
       transform: none;
-      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
     }
   }
 `;
 
 const PlayersContainer = styled.div`
   width: 100%;
-  max-width: 800px;
-  background: rgba(19, 42, 87, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
+  max-width: 1200px;
+  background: rgba(19, 42, 87, 0.9);
+  backdrop-filter: blur(15px);
+  border-radius: 25px;
   padding: 1.5rem;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-  z-index: 1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   border: 3px solid #ffde00;
   position: relative;
+  min-height: 220px;
 
   &::before {
     content: '';
@@ -531,34 +561,33 @@ const PlayersContainer = styled.div`
     background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
     opacity: 0.1;
     z-index: -1;
-    border-radius: 17px;
+    border-radius: 22px;
   }
 `;
 
 const PlayersHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 1.5rem;
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 0.8rem;
-
-  h2 {
-    font-size: 1.8rem;
-    margin: 0;
-    color: #ffde00;
-    text-shadow: 2px 2px 0 #3b4cca;
-  }
 `;
 
-interface PokeBallIconProps {
-  small?: boolean;
-}
+const PlayersTitle = styled.h2`
+  font-size: 1.8rem;
+  margin: 0;
+  color: #ffde00;
+  text-shadow: 2px 2px 0 #3b4cca;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+`;
 
-const PokeBallIcon = styled.div<PokeBallIconProps>`
+const PokeBallIcon = styled.div`
   display: inline-block;
-  width: ${(props) => (props.small ? '20px' : '30px')};
-  height: ${(props) => (props.small ? '20px' : '30px')};
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: linear-gradient(
     to bottom,
@@ -568,89 +597,101 @@ const PokeBallIcon = styled.div<PokeBallIconProps>`
     #ee1515 100%
   );
   position: relative;
-  margin-right: ${(props) => (props.small ? '5px' : '8px')};
-  vertical-align: middle;
 
   &::before {
     content: '';
     position: absolute;
-    width: ${(props) => (props.small ? '6px' : '8px')};
-    height: ${(props) => (props.small ? '6px' : '8px')};
+    width: 8px;
+    height: 8px;
     background: white;
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 ${(props) => (props.small ? '1px' : '2px')} #333,
-      0 0 0 ${(props) => (props.small ? '3px' : '4px')} white;
+    box-shadow: 0 0 0 2px #333, 0 0 0 4px white;
   }
 `;
 
 const PlayerCount = styled.div`
-  display: flex;
-  align-items: center;
   background: linear-gradient(45deg, #ee1515, #3b4cca);
   color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
+  padding: 8px 16px;
+  border-radius: 25px;
   font-weight: bold;
   border: 2px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.9rem;
 `;
 
 const EmptyPlayersList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 2rem 0;
+  height: 150px;
 `;
 
 const EmptyMessage = styled.p`
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
   font-style: italic;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
 `;
 
 const AddPlayerPrompt = styled.button`
   background: none;
-  border: 2px dashed #ffde00;
-  border-radius: 10px;
-  padding: 1rem 2rem;
+  border: 3px dashed #ffde00;
+  border-radius: 15px;
+  padding: 1.5rem 3rem;
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
+  font-size: 1.1rem;
 
   &:hover {
     background: rgba(255, 222, 0, 0.1);
     transform: translateY(-3px);
+    border-style: solid;
   }
 `;
 
 const PlayersList = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  max-height: 300px;
+  height: 150px;
+  overflow: hidden;
 
-  &::-webkit-scrollbar {
-    width: 5px;
+  /* Handle 4-5 players layout */
+  &:has(.player-card:nth-child(4):last-child) {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+
+    .player-card:nth-child(3) {
+      grid-column: 1;
+    }
+    .player-card:nth-child(4) {
+      grid-column: 2;
+    }
   }
 
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-  }
+  &:has(.player-card:nth-child(5)) {
+    grid-template-columns: repeat(3, 1fr);
 
-  &::-webkit-scrollbar-thumb {
-    background: #ffde00;
-    border-radius: 10px;
+    .player-card:nth-child(4) {
+      grid-column: 1;
+      justify-self: end;
+    }
+    .player-card:nth-child(5) {
+      grid-column: 3;
+      justify-self: start;
+    }
   }
 `;
 
 const PlayerCard = styled.div`
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   padding: 1rem;
   display: flex;
@@ -658,6 +699,9 @@ const PlayerCard = styled.div`
   position: relative;
   transition: all 0.3s ease;
   border: 2px solid rgba(255, 255, 255, 0.1);
+  animation: ${slideIn} 0.5s ease-out;
+  height: 70px;
+  min-width: 200px;
 
   &::before {
     content: '';
@@ -676,38 +720,25 @@ const PlayerCard = styled.div`
     background: rgba(255, 255, 255, 0.15);
     transform: translateY(-5px);
     border-color: #ffde00;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   }
 `;
 
-const TrainerBadge = styled.div`
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  font-size: 1rem;
-  color: #ffde00;
-  opacity: 0.5;
-  transition: all 0.3s ease;
-
-  ${PlayerCard}:hover & {
-    opacity: 1;
-    transform: rotate(15deg);
-  }
-`;
-
-const PlayerAvatar = styled.img`
-  width: 80px;
-  height: 80px;
+const PlayerAvatarContainer = styled.div`
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  padding: 3px;
-  object-fit: contain;
+  padding: 2px;
   margin-right: 1rem;
-  border: 3px solid #ffde00;
+  border: 2px solid #ffde00;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 1;
   background: linear-gradient(135deg, #132a57 0%, #233975 100%);
-
-  /* Effetto hover per evidenziare l'animazione */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   ${PlayerCard}:hover & {
@@ -716,21 +747,47 @@ const PlayerAvatar = styled.img`
   }
 `;
 
-const PlayerName = styled.h3`
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
+const PlayerAvatarImage = styled.img`
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  display: block;
+`;
+
+const PlayerInfo = styled.div`
+  flex: 1;
   position: relative;
   z-index: 1;
+`;
+
+const PlayerName = styled.h3`
+  margin: 0 0 0.3rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+`;
+
+const TrainerBadge = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #ffde00;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+
+  ${PlayerCard}:hover & {
+    opacity: 1;
+    transform: translateX(3px);
+  }
 `;
 
 const RemovePlayerButton = styled.button`
   position: absolute;
   top: -8px;
   right: -8px;
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #ee1515;
   border: 2px solid white;
@@ -738,7 +795,7 @@ const RemovePlayerButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   cursor: pointer;
   transition: all 0.3s ease;
   opacity: 0;
@@ -752,7 +809,7 @@ const RemovePlayerButton = styled.button`
 
   &:hover {
     background: #ff0044;
-    transform: scale(1.2);
+    transform: scale(1.15);
   }
 `;
 
@@ -782,11 +839,10 @@ const ModalOverlay = styled.div`
 
 const Modal = styled.div`
   background: radial-gradient(circle at top left, #233975 0%, #132a57 100%);
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
+  border-radius: 25px;
+  width: 500px;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   animation: slideUp 0.3s ease;
   border: 3px solid #ffde00;
   position: relative;
@@ -819,7 +875,7 @@ const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 2rem;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   position: relative;
   z-index: 1;
@@ -827,7 +883,7 @@ const ModalHeader = styled.div`
   h2 {
     margin: 0;
     color: #ffde00;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
   }
 `;
@@ -847,7 +903,7 @@ const CloseButton = styled.button`
 `;
 
 const ModalContent = styled.div`
-  padding: 1.5rem;
+  padding: 2rem;
   position: relative;
   z-index: 1;
 `;
@@ -861,13 +917,13 @@ const Label = styled.label`
   margin-bottom: 0.5rem;
   color: #ffde00;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1rem;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.8rem;
-  border-radius: 10px;
+  padding: 1rem;
+  border-radius: 12px;
   border: 2px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.1);
   color: white;
@@ -887,7 +943,7 @@ const Input = styled.input`
 
 const FormHelp = styled.p`
   margin-top: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.7);
   font-style: italic;
 `;
@@ -900,8 +956,8 @@ const ModalButtons = styled.div`
 `;
 
 const CancelButton = styled.button`
-  padding: 0.8rem 1.5rem;
-  border-radius: 10px;
+  padding: 1rem 2rem;
+  border-radius: 12px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   background: transparent;
   color: white;
@@ -911,19 +967,20 @@ const CancelButton = styled.button`
 
   &:hover {
     background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
   }
 `;
 
 const SubmitButton = styled.button`
-  padding: 0.8rem 1.5rem;
-  border-radius: 10px;
+  padding: 1rem 2rem;
+  border-radius: 12px;
   border: none;
   background: #ee1515;
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
 
@@ -939,14 +996,15 @@ const SubmitButton = styled.button`
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 7px 0 rgba(0, 0, 0, 0.3);
   }
 
   &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
   }
 `;
+
 const AvatarPreviewContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -954,65 +1012,6 @@ const AvatarPreviewContainer = styled.div`
   margin-top: 15px;
 `;
 
-// const AvatarPreview = styled.div`
-//   width: 80px;
-//   height: 80px;
-//   border-radius: 50%;
-//   background: rgba(0, 0, 0, 0.2);
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   overflow: hidden;
-//   border: 3px solid #ffde00;
-//   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-//   margin-bottom: 8px;
-
-//   img {
-//     width: 100%;
-//     height: 100%;
-//     object-fit: contain;
-//   }
-// `;
-
-const PreviewLabel = styled.span`
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
-`;
-// Modifica questi componenti styled
-
-// Contenitore dell'avatar
-const PlayerAvatarContainer = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  padding: 3px;
-  margin-right: 1rem;
-  border: 3px solid #ffde00;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(135deg, #132a57 0%, #233975 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-
-  /* Effetto hover per evidenziare l'animazione */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  ${PlayerCard}:hover & {
-    transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  }
-`;
-
-// Immagine vera e propria dell'avatar
-const PlayerAvatarImage = styled.img`
-  width: 70%;
-  height: 70%;
-  object-fit: contain;
-  display: block;
-`;
 const AvatarPreview = styled.div`
   width: 80px;
   height: 80px;
@@ -1023,7 +1022,7 @@ const AvatarPreview = styled.div`
   justify-content: center;
   overflow: hidden;
   border: 3px solid #ffde00;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   margin-bottom: 8px;
 `;
 
@@ -1032,4 +1031,9 @@ const AvatarPreviewImage = styled.img`
   height: 95%;
   object-fit: contain;
   display: block;
+`;
+
+const PreviewLabel = styled.span`
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
 `;

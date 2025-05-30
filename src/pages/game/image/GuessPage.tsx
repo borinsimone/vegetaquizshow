@@ -328,52 +328,68 @@ const fadeIn = keyframes`
 const GameContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
   height: 100vh;
-  padding: 2rem;
+  padding: 1rem;
   position: relative;
   overflow: hidden;
+  gap: 0.5rem;
 `;
 
 const BackButton = styled(Link)`
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(19, 42, 87, 0.8);
+  top: 1rem;
+  left: 1rem;
+  background: rgba(19, 42, 87, 0.9);
   color: white;
-  padding: 8px 15px;
-  border-radius: 20px;
+  padding: 0.6rem 1rem;
+  border-radius: 25px;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   font-weight: 600;
   border: 2px solid #ffde00;
   transition: all 0.3s ease;
   z-index: 10;
+  font-size: 0.9rem;
 
   &:hover {
     background: #3b4cca;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateX(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
   }
 `;
 
 const PageTitle = styled.h1`
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   color: #ffde00;
   text-shadow: 3px 3px 0 #3b4cca;
-
   text-align: center;
   z-index: 1;
+  margin: 0;
+  margin-top: 3.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+    margin-top: 3rem;
+  }
 `;
 
 const GameInstructions = styled.p`
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-
+  color: rgba(255, 255, 255, 0.8);
   z-index: 1;
+  margin: 0;
+  font-size: 0.9rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const GameHeader = styled.div`
@@ -381,11 +397,12 @@ const GameHeader = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
+  margin-bottom: 0.5rem;
 `;
 
 const ScoreDisplay = styled.div`
-  background: rgba(19, 42, 87, 0.8);
-  padding: 0.5rem 1rem;
+  background: rgba(19, 42, 87, 0.9);
+  padding: 0.4rem 0.8rem;
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -393,42 +410,43 @@ const ScoreDisplay = styled.div`
 `;
 
 const ScoreLabel = styled.span`
-  font-size: 0.9rem;
-  margin-right: 8px;
+  font-size: 0.8rem;
+  margin-right: 6px;
   color: white;
 `;
 
 const ScoreValue = styled.span`
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: bold;
   color: #ffde00;
 `;
 
 const GameControls = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 8px;
 `;
 
 const ControlButton = styled.button`
-  background: rgba(19, 42, 87, 0.8);
+  background: rgba(19, 42, 87, 0.9);
   color: white;
   border: none;
   border-radius: 20px;
-  padding: 8px 15px;
+  padding: 0.5rem 0.8rem;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s;
   border: 2px solid #ffde00;
+  font-size: 0.8rem;
 
   &:hover {
     background: #3b4cca;
   }
 
   &:active {
-    transform: translateY(2px);
+    transform: translateY(1px);
   }
 `;
 
@@ -485,43 +503,44 @@ interface ProgressBarProps {
 }
 
 const GuessInput = styled.input`
-  flex: 1;
-  padding: 12px 15px;
+  padding: 0.8rem;
   border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   outline: none;
   border: 2px solid rgba(59, 76, 202, 0.5);
 
   &:focus {
     border-color: #3b4cca;
+    box-shadow: 0 0 0 3px rgba(59, 76, 202, 0.2);
   }
 `;
 
 const GuessButton = styled.button`
-  padding: 12px 25px;
+  padding: 0.8rem 1.2rem;
   background: #ee1515;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
 
   &:hover:not(:disabled) {
     background: #d10000;
     transform: translateY(-2px);
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(1px);
+    transform: translateY(0);
   }
 
   &:disabled {
-    background: #cccccc;
+    background: #666;
     cursor: not-allowed;
   }
 `;
@@ -531,9 +550,9 @@ interface ResultBoxProps {
 }
 
 const ResultIcon = styled.div`
-  font-size: 3rem;
-  width: 80px;
-  height: 80px;
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
@@ -542,419 +561,48 @@ const ResultIcon = styled.div`
 `;
 
 const ResultTitle = styled.h2`
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   margin: 0;
 `;
 
 const ResultDetails = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   opacity: 0.9;
+  margin: 0;
 `;
 
 const ResultButton = styled.button`
   background: #ffde00;
   color: #3b4cca;
   border: none;
-  padding: 12px 25px;
-  border-radius: 30px;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
   &:hover {
     background: white;
-    transform: translateY(-3px);
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
   }
 `;
 
-const PlayerSection = styled.div`
-  width: 100%;
-  max-width: 800px;
-  background: rgba(19, 42, 87, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  z-index: 1;
-
-  border: 3px solid #ffde00;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #ffde00;
-  text-shadow: 2px 2px 0 #3b4cca;
-`;
-
-const InstructionText = styled.div`
-  color: rgba(255, 255, 255, 0.9);
-  font-style: italic;
-  font-size: 0.9rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 6px 12px;
-  border-radius: 20px;
-`;
-
-const PlayerList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-interface ActiveProps {
-  $active?: boolean;
-}
-
-const PlayerCard = styled.div<ActiveProps>`
-  display: flex;
-  align-items: center;
-  background: ${(props) =>
-    props.$active
-      ? 'linear-gradient(135deg, rgba(255, 222, 0, 0.2), rgba(59, 76, 202, 0.2))'
-      : 'rgba(255, 255, 255, 0.08)'};
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  flex: 1;
-  min-width: 200px;
-  transition: all 0.3s ease;
-  position: relative;
-  border: 2px solid ${(props) => (props.$active ? '#FFDE00' : 'transparent')};
-  cursor: pointer;
-
-  ${(props) =>
-    props.$active &&
-    css`
-      animation: ${pulse} 2s infinite ease-in-out;
-      box-shadow: 0 0 15px rgba(255, 222, 0, 0.4);
-    `}
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-3px);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.2;
-    z-index: 0;
-    border-radius: 10px;
-  }
-`;
-
-const PlayerAvatar = styled.img`
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  object-fit: contain;
-  margin-right: 1rem;
-  border: 2px solid #ffde00;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(135deg, #132a57 0%, #233975 100%);
-`;
-
-const PlayerInfo = styled.div`
-  flex: 1;
-  position: relative;
-  z-index: 1;
-`;
-
-const PlayerName = styled.div`
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin-bottom: 0.3rem;
-  color: white;
-`;
-
-const PlayerScoreDisplay = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #ffde00;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-`;
-
-const ActiveIndicator = styled.div`
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #ee1515;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  z-index: 2;
-  animation: ${shine} 2s infinite;
-`;
-
-const BadgeIcon = styled.div`
-  width: 18px;
-  height: 18px;
-  background: #ffde00;
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 57%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 57%,
-    2% 35%,
-    39% 35%
-  );
-  display: inline-block;
-  margin-right: 6px;
-  vertical-align: middle;
-`;
-
-const BackgroundElements = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  /* Dark background with Pokemon pattern */
-  &::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #0a1428;
-    background-image: radial-gradient(
-        circle at 30% 20%,
-        rgba(59, 76, 202, 0.08) 0%,
-        rgba(59, 76, 202, 0) 50%
-      ),
-      radial-gradient(
-        circle at 70% 60%,
-        rgba(238, 21, 21, 0.08) 0%,
-        rgba(238, 21, 21, 0) 50%
-      ),
-      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z' fill='%233b4cca' fill-opacity='0.05'/%3E%3Cpath d='M30 60a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z' fill='%23ee1515' fill-opacity='0.05'/%3E%3C/svg%3E");
-    z-index: -1;
-  }
-
-  /* Additional subtle Pokemon elements */
-  &::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50a15 15 0 1 0 0-30 15 15 0 0 0 0 30zm0-7a8 8 0 1 1 0-16 8 8 0 0 1 0 16z' fill='%23ffde00' fill-opacity='0.03'/%3E%3C/svg%3E");
-    opacity: 0.5;
-    z-index: -1;
-  }
-`;
-
-const BallBase = styled.div`
-  position: absolute;
-  opacity: 0.15;
-  filter: blur(2px);
-  z-index: 0;
-
-  &.ball1 {
-    width: 300px;
-    height: 300px;
-    top: -100px;
-    right: -50px;
-    animation: ${float} 15s ease-in-out infinite;
-  }
-
-  &.ball2 {
-    width: 200px;
-    height: 200px;
-    bottom: -50px;
-    left: 10%;
-    animation: ${float} 20s ease-in-out infinite reverse;
-  }
-
-  &.ball3 {
-    width: 250px;
-    height: 250px;
-    top: 30%;
-    left: -100px;
-    animation: ${float} 17s ease-in-out infinite 5s;
-  }
-
-  &.ball4 {
-    width: 280px;
-    height: 280px;
-    bottom: 10%;
-    right: 5%;
-    animation: ${float} 22s ease-in-out infinite 3s;
-  }
-
-  &.ball5 {
-    width: 150px;
-    height: 150px;
-    top: 20%;
-    right: 15%;
-    animation: ${float} 18s ease-in-out infinite 8s;
-  }
-`;
-
-const PokeBallBg = styled(BallBase)`
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.7) 0%,
-    rgba(255, 255, 255, 0.7) 35%,
-    rgba(0, 0, 0, 0.1) 35.5%,
-    rgba(0, 0, 0, 0.1) 45%,
-    rgba(238, 21, 21, 0.7) 45.5%,
-    rgba(238, 21, 21, 0.7) 100%
-  );
-  border-radius: 50%;
-  box-shadow: 0 0 50px rgba(238, 21, 21, 0.5);
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 30%;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-  }
-`;
-
-const GreatBallBg = styled(BallBase)`
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.7) 0%,
-    rgba(255, 255, 255, 0.7) 35%,
-    rgba(0, 0, 0, 0.1) 35.5%,
-    rgba(0, 0, 0, 0.1) 45%,
-    rgba(59, 76, 202, 0.7) 45.5%,
-    rgba(59, 76, 202, 0.7) 100%
-  );
-  border-radius: 50%;
-  box-shadow: 0 0 50px rgba(59, 76, 202, 0.5);
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 30%;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-  }
-`;
-
-const UltraBallBg = styled(BallBase)`
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.7) 0%,
-    rgba(255, 255, 255, 0.7) 35%,
-    rgba(0, 0, 0, 0.1) 35.5%,
-    rgba(0, 0, 0, 0.1) 45%,
-    rgba(255, 222, 0, 0.7) 45.5%,
-    rgba(255, 222, 0, 0.7) 100%
-  );
-  border-radius: 50%;
-  box-shadow: 0 0 50px rgba(255, 222, 0, 0.5);
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 30%;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-  }
-`;
-
-const MasterBallBg = styled(BallBase)`
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.7) 0%,
-    rgba(255, 255, 255, 0.7) 35%,
-    rgba(0, 0, 0, 0.1) 35.5%,
-    rgba(0, 0, 0, 0.1) 45%,
-    rgba(147, 58, 180, 0.7) 45.5%,
-    rgba(147, 58, 180, 0.7) 100%
-  );
-  border-radius: 50%;
-  box-shadow: 0 0 50px rgba(147, 58, 180, 0.5);
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 30%;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-  }
-`;
 // Nuovo container per il layout orizzontale
 const GameLayoutContainer = styled.div`
   display: flex;
   width: 100%;
-  gap: 20px;
+  gap: 1rem;
   align-items: center;
   justify-content: center;
-  margin: 1rem 0;
+  flex: 1;
+  min-height: 0;
 
   @media (max-width: 900px) {
     flex-direction: column;
-    align-items: center;
+    gap: 0.8rem;
   }
 `;
 
@@ -964,35 +612,30 @@ const VerticalProgressContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  position: absolute;
-  left: 5vw;
+  width: 40px;
+
   @media (max-width: 900px) {
     width: 100%;
-    height: 40px;
-    margin-bottom: 1rem;
+    height: 30px;
+    order: 1;
   }
 `;
 
 // Barra di progressione verticale
 const VerticalProgressBar = styled.div`
-  width: 40px;
-  height: 300px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  width: 35px;
+  height: 250px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 
   @media (max-width: 900px) {
     width: 100%;
-    height: 20px;
+    height: 18px;
   }
 `;
-
-interface ProgressBarProps {
-  $percentage: number;
-}
 
 // Riempimento della barra verticale
 const VerticalProgressFill = styled.div<ProgressBarProps>`
@@ -1015,16 +658,17 @@ const VerticalProgressFill = styled.div<ProgressBarProps>`
 // Testo della percentuale nella barra verticale
 const VerticalProgressText = styled.div`
   position: absolute;
-  bottom: 10px;
+  bottom: 8px;
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   color: white;
   font-weight: 600;
   text-shadow: 1px 1px 2px black;
   writing-mode: vertical-lr;
   transform: rotate(270deg);
+
   @media (max-width: 900px) {
     writing-mode: horizontal-tb;
     transform: none;
@@ -1032,45 +676,7 @@ const VerticalProgressText = styled.div`
     bottom: auto;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-`;
-
-// Container per il form sulla destra
-const SideGuessContainer = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* max-width: 250px; */
-  width: 400px;
-  position: absolute;
-  right: 5vw;
-  @media (max-width: 900px) {
-    max-width: 100%;
-    width: 100%;
-    margin-top: 1rem;
-  }
-`;
-
-// Form di indovinello verticale
-const SideGuessForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background: rgba(19, 42, 87, 0.7);
-  padding: 1.5rem;
-  border-radius: 15px;
-  border: 2px solid rgba(255, 222, 0, 0.5);
-
-  h3 {
-    color: #ffde00;
-    margin: 0 0 0.5rem 0;
-    text-align: center;
-    text-shadow: 1px 1px 0 #3b4cca;
-  }
-
-  @media (max-width: 900px) {
-    width: 100%;
+    font-size: 0.8rem;
   }
 `;
 
@@ -1078,43 +684,290 @@ const SideGuessForm = styled.div`
 const PuzzleContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   aspect-ratio: 1 / 1.4;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   border: 3px solid #ffde00;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  object-fit: cover;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+
   @media (max-width: 900px) {
-    max-width: 100%;
+    max-width: 280px;
+    order: 2;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 250px;
   }
 `;
 
-// Modifica gli stili responsivi
-const GameplayArea = styled.div`
-  width: 100%;
-  max-width: 900px;
+// Container per il form sulla destra
+const SideGuessContainer = styled.div`
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  justify-content: center;
+  width: 300px;
+  max-height: 350px;
+
+  @media (max-width: 900px) {
+    width: 100%;
+    max-width: 400px;
+    order: 3;
+    max-height: none;
+  }
 `;
 
-// Sovrascrivi ResultBox per adattarlo al nuovo layout
-const ResultBox = styled.div<ResultBoxProps>`
-  width: 100%;
-  padding: 1.5rem;
-  background: ${(props) =>
-    props.$correct
-      ? 'linear-gradient(135deg, rgba(120, 200, 80, 0.9), rgba(60, 130, 40, 0.9))'
-      : 'linear-gradient(135deg, rgba(238, 21, 21, 0.9), rgba(150, 30, 30, 0.9))'};
+// Form di indovinello verticale
+const SideGuessForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background: rgba(19, 42, 87, 0.8);
+  padding: 1.2rem;
   border-radius: 15px;
+  border: 2px solid rgba(255, 222, 0, 0.6);
+  backdrop-filter: blur(10px);
+
+  h3 {
+    color: #ffde00;
+    margin: 0 0 0.3rem 0;
+    text-align: center;
+    text-shadow: 1px 1px 0 #3b4cca;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 900px) {
+    padding: 1rem;
+  }
+`;
+
+const GameplayArea = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 1;
+  min-height: 0;
+`;
+
+const ResultBox = styled.div<ResultBoxProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
+  background: ${(props) =>
+    props.$correct ? 'rgba(34, 197, 94, 0.9)' : 'rgba(239, 68, 68, 0.9)'};
+  padding: 1.5rem;
+  border-radius: 15px;
   color: white;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border: 3px solid ${(props) => (props.$correct ? '#78C850' : '#ee1515')};
   animation: ${fadeIn} 0.5s ease;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+`;
+
+const PlayerSection = styled.div`
+  background: rgba(19, 42, 87, 0.8);
+  border-radius: 15px;
+  padding: 1rem;
+  border: 2px solid rgba(255, 222, 0, 0.6);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+`;
+
+const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: flex-start;
+  }
+`;
+
+const SectionTitle = styled.h3`
+  color: #ffde00;
+  margin: 0;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 0 #3b4cca;
+`;
+
+const InstructionText = styled.span`
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-style: italic;
+`;
+
+const PlayerList = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+`;
+
+interface PlayerCardProps {
+  $active: boolean;
+}
+
+const PlayerCard = styled.div<PlayerCardProps>`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  background: ${(props) =>
+    props.$active ? 'rgba(255, 222, 0, 0.9)' : 'rgba(255, 255, 255, 0.1)'};
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid ${(props) => (props.$active ? '#ffde00' : 'transparent')};
+  position: relative;
+  min-width: 180px;
+
+  &:hover {
+    background: ${(props) =>
+      props.$active ? 'rgba(255, 222, 0, 1)' : 'rgba(255, 255, 255, 0.2)'};
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  ${(props) =>
+    props.$active &&
+    css`
+      animation: ${pulse} 2s infinite;
+    `}
+
+  @media (max-width: 600px) {
+    min-width: auto;
+    width: 100%;
+  }
+`;
+
+const PlayerAvatar = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+`;
+
+const PlayerInfo = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+`;
+
+const PlayerName = styled.span`
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: ${(props) => (props.theme?.active ? '#3b4cca' : 'white')};
+`;
+
+const PlayerScoreDisplay = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: ${(props) =>
+    props.theme?.active ? '#3b4cca' : 'rgba(255, 255, 255, 0.8)'};
+  font-weight: 500;
+`;
+
+const BadgeIcon = styled.div`
+  width: 12px;
+  height: 12px;
+  background: #ee1515;
+  border-radius: 50%;
+  border: 1px solid white;
+`;
+
+const ActiveIndicator = styled.div`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #22c55e;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  border: 2px solid white;
+  animation: ${shine} 2s infinite;
+`;
+
+const BackgroundElements = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+`;
+
+const PokeBallBg = styled.div`
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff6b6b, #ee1515);
+  opacity: 0.1;
+  animation: ${float} 6s ease-in-out infinite;
+
+  &.ball1 {
+    top: 10%;
+    left: 15%;
+    animation-delay: 0s;
+  }
+  &.ball2 {
+    top: 60%;
+    right: 20%;
+    animation-delay: 2s;
+  }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+`;
+
+const GreatBallBg = styled(PokeBallBg)`
+  background: radial-gradient(circle at 30% 30%, #4dabf7, #3b4cca);
+
+  &.ball3 {
+    bottom: 20%;
+    left: 10%;
+    animation-delay: 4s;
+  }
+`;
+
+const UltraBallBg = styled(PokeBallBg)`
+  background: radial-gradient(circle at 30% 30%, #ffd43b, #ffde00);
+
+  &.ball4 {
+    top: 30%;
+    right: 10%;
+    animation-delay: 1s;
+  }
+`;
+
+const MasterBallBg = styled(PokeBallBg)`
+  background: radial-gradient(circle at 30% 30%, #b197fc, #9775fa);
+
+  &.ball5 {
+    bottom: 40%;
+    right: 15%;
+    animation-delay: 3s;
+  }
 `;

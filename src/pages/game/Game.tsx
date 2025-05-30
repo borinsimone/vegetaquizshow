@@ -13,6 +13,9 @@ import {
   FaUserAlt,
   FaHatWizard,
   FaCity,
+  FaCrown,
+  FaMedal,
+  FaStar,
 } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useGlobalContext } from '../../context/GlobalContext';
@@ -38,165 +41,190 @@ function Game() {
   const { players, updatePlayerScore } = useGlobalContext();
 
   useEffect(() => {
-    // Se non ci sono giocatori, torna alla landing page
     if (players.length === 0) {
       navigate('/');
     }
   }, [navigate, players]);
 
-  // Opzioni di gioco disponibili
-  const gameOptions: GameOption[] = [
+  // Enhanced game options with better descriptions and categories
+  const gameOptions = [
     {
       id: 'categories',
       title: 'Quiz Pokémon',
-      description: 'Sfida le tue conoscenze sui Pokémon in varie categorie',
+      description: 'Metti alla prova le tue conoscenze sui Pokémon',
       icon: <FaGamepad />,
-      color: '#EE1515', // Rosso Pokémon
+      color: '#FF6B6B',
+      gradient: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A52 100%)',
+      category: 'Trivia',
       path: '/game/categories',
     },
     {
       id: 'wheel',
       title: 'Ruota della Fortuna',
-      description: 'Gira la ruota e affronta sfide casuali',
+      description: 'Gira la ruota e affronta sfide casuali per vincere punti',
       icon: <FaDice />,
-      color: '#3bcaca', // Blu Pokémon
+      color: '#4ECDC4',
+      gradient: 'linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%)',
+      category: 'Fortuna',
       path: '/game/wheel',
     },
     {
       id: 'image',
-      title: "WhO's ThAt PoKéMoN?",
-      description: "Indovina il Pokémon dall'ombra o immagine sfocata",
+      title: 'Chi è quel Pokémon?',
+      description: 'Riconosci i Pokémon dalle loro silhouette misteriose',
       icon: <FaImage />,
-      color: '#FF9C54', // Arancione Pokémon
+      color: '#FFE66D',
+      gradient: 'linear-gradient(135deg, #FFE66D 0%, #FF9F43 100%)',
+      category: 'Visual',
       path: '/game/image',
     },
     {
       id: 'city',
-      title: 'Citta Pokémon',
-      description: 'Indovina la città Pokémon da un indizio',
+      title: 'Città Pokémon',
+      description: 'Esplora e indovina le città del mondo Pokémon',
       icon: <FaCity />,
-      color: '#f066ff', // Viola Pokémon
+      color: '#A8E6CF',
+      gradient: 'linear-gradient(135deg, #A8E6CF 0%, #7FCDCD 100%)',
+      category: 'Geografia',
       path: '/game/city',
     },
     {
       id: 'pokemon',
-      title: 'Poké-Sherlock',
-      description: 'Indovina il Pokémon dagli indizi',
+      title: 'Poké-Detective',
+      description: 'Risolvi enigmi e indovina i Pokémon dagli indizi',
       icon: <FaMagnifyingGlass />,
-      color: '#78C850', // Verde Pokémon
+      color: '#C7CEEA',
+      gradient: 'linear-gradient(135deg, #C7CEEA 0%, #A8A8F0 100%)',
+      category: 'Mistero',
       path: '/game/pokemon',
     },
   ];
-  <PlayerList>
-    {players.map((player) => (
-      <PlayerCard key={player.id}>
-        <PlayerAvatarContainer>
-          <PlayerAvatarImage
-            src={player.avatar}
-            alt={player.name}
-          />
-        </PlayerAvatarContainer>
-        <PlayerInfo>
-          <PlayerName>{player.name}</PlayerName>
-          <PlayerScore>
-            <BadgeIcon /> {player.score} punti
-          </PlayerScore>
-        </PlayerInfo>
-        <TrainerBadge>
-          <FaHatWizard />
-        </TrainerBadge>
-      </PlayerCard>
-    ))}
-  </PlayerList>;
+
   const handleScoreEdit = (player) => {
     const newScore = prompt(
       `Modifica il punteggio per ${player.name}:`,
       player.score.toString()
     );
 
-    // Verifica che sia stato inserito un valore e che sia un numero
     if (newScore !== null) {
       const parsedScore = parseInt(newScore, 10);
-
       if (!isNaN(parsedScore)) {
-        // Aggiorna il punteggio utilizzando la funzione del context
         updatePlayerScore(player.id, parsedScore);
       } else {
         alert('Inserisci un numero valido.');
       }
     }
   };
+
+  // Sort players by score for leaderboard
+  const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+
   return (
     <GameContainer>
-      <BackButton to='/'>
-        <FaArrowLeft /> Torna alla home
-      </BackButton>
+      <Header>
+        <BackButton to='/'>
+          <FaArrowLeft />
+          <span>Home</span>
+        </BackButton>
 
-      <PageTitle>Centro Sfide Pokémon</PageTitle>
+        <HeaderContent>
+          <PageTitle>Centro Sfide Pokémon</PageTitle>
+          <PageSubtitle>Scegli la tua avventura</PageSubtitle>
+        </HeaderContent>
+      </Header>
 
-      <GameGrid>
-        {gameOptions.map((game) => (
-          <GameCard
-            key={game.id}
-            to={game.path}
-            $color={game.color}
-          >
-            <GameIconContainer $color={game.color}>
-              {game.icon}
-            </GameIconContainer>
-            <GameDetails>
-              <GameTitle>{game.title}</GameTitle>
-              <GameDescription>{game.description}</GameDescription>
-            </GameDetails>
-            <CardArrow>
-              <div className='arrow'>→</div>
-            </CardArrow>
-            <PokeBallOverlay />
-          </GameCard>
-        ))}
-      </GameGrid>
+      <MainContent>
+        <GamesSection>
+          <SectionTitle>
+            <FaGamepad />
+            Modalità di Gioco
+          </SectionTitle>
 
-      <PlayerSection>
-        <SectionHeader>
-          <SectionTitle>Allenatori</SectionTitle>
-          <PlayerCount>
-            {players.length}{' '}
-            {players.length === 1 ? 'allenatore' : 'allenatori'}
-          </PlayerCount>
-        </SectionHeader>
+          <GameGrid>
+            {gameOptions.map((game, index) => (
+              <GameCard
+                key={game.id}
+                to={game.path}
+                $gradient={game.gradient}
+                $delay={index * 0.1}
+              >
+                <GameCardHeader>
+                  <GameCategory>{game.category}</GameCategory>
+                  <GameIconContainer>{game.icon}</GameIconContainer>
+                </GameCardHeader>
 
-        <PlayerList>
-          {players.map((player) => (
-            <PlayerCard key={player.id}>
-              <PlayerAvatarContainer>
-                <PlayerAvatarImage
-                  src={player.avatar}
-                  alt={player.name}
-                />
-              </PlayerAvatarContainer>
-              <PlayerInfo>
-                <PlayerName>{player.name}</PlayerName>
-                <PlayerScore onClick={() => handleScoreEdit(player)}>
-                  <BadgeIcon /> {player.score} punti
-                  <EditIcon>
-                    <FaEdit />
-                  </EditIcon>
-                </PlayerScore>
-              </PlayerInfo>
-              <TrainerBadge>
-                <FaHatWizard />
-              </TrainerBadge>
-            </PlayerCard>
-          ))}
-        </PlayerList>
-      </PlayerSection>
+                <GameCardBody>
+                  <GameTitle>{game.title}</GameTitle>
+                  <GameDescription>{game.description}</GameDescription>
+                </GameCardBody>
+
+                <GameCardFooter>
+                  <PlayButton>
+                    Gioca Ora
+                    <FaArrowLeft style={{ transform: 'rotate(180deg)' }} />
+                  </PlayButton>
+                </GameCardFooter>
+
+                <GameCardGlow />
+              </GameCard>
+            ))}
+          </GameGrid>
+        </GamesSection>
+
+        <LeaderboardSection>
+          <SectionTitle>
+            <FaTrophy />
+            Classifica Allenatori
+          </SectionTitle>
+
+          <LeaderboardContainer>
+            {sortedPlayers.map((player, index) => (
+              <PlayerCard
+                key={player.id}
+                $rank={index + 1}
+              >
+                <PlayerRank $rank={index + 1}>
+                  {index === 0 && <FaCrown />}
+                  {index === 1 && <FaMedal />}
+                  {index === 2 && <FaStar />}
+                  {index > 2 && <span>{index + 1}</span>}
+                </PlayerRank>
+
+                <PlayerAvatarContainer $rank={index + 1}>
+                  <PlayerAvatarImage
+                    src={player.avatar}
+                    alt={player.name}
+                  />
+                  {index < 3 && <PlayerBadge $rank={index + 1} />}
+                </PlayerAvatarContainer>
+
+                <PlayerInfo>
+                  <PlayerName>{player.name}</PlayerName>
+                  <PlayerScore onClick={() => handleScoreEdit(player)}>
+                    <ScoreIcon />
+                    {player.score.toLocaleString()} punti
+                    <EditIcon>
+                      <FaEdit />
+                    </EditIcon>
+                  </PlayerScore>
+                </PlayerInfo>
+
+                <PlayerActions>
+                  {/* <ActionButton>
+                    <FaHatWizard />
+                  </ActionButton> */}
+                </PlayerActions>
+              </PlayerCard>
+            ))}
+          </LeaderboardContainer>
+        </LeaderboardSection>
+      </MainContent>
 
       <BackgroundElements>
-        <PokeBallBg className='ball1' />
-        <PokeBallBg className='ball2' />
-        <GreatBallBg className='ball3' />
-        <UltraBallBg className='ball4' />
-        <MasterBallBg className='ball5' />
+        <FloatingPokeball className='pokeball-1' />
+        <FloatingPokeball className='pokeball-2' />
+        <FloatingPokeball className='pokeball-3' />
+        <StarField />
       </BackgroundElements>
     </GameContainer>
   );
@@ -204,254 +232,385 @@ function Game() {
 
 export default Game;
 
-// Animations
+// Enhanced Animations
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const float = keyframes`
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+`;
+
+const glow = keyframes`
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 222, 0, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(255, 222, 0, 0.6); }
+`;
+
+const shimmer = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 `;
 
 const pulse = keyframes`
-  0% { transform: scale(1); }
+  0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
 `;
 
-const shine = keyframes`
-  0% { background-position: -200px; }
-  100% { background-position: 200px; }
+const twinkle = keyframes`
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 `;
 
-const pokeballWiggle = keyframes`
-  0% { transform: rotate(-5deg); }
-  25% { transform: rotate(5deg); }
-  50% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
-  100% { transform: rotate(0deg); }
-`;
-
-// Styled Components
+// Modern Styled Components
 const GameContainer = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  background: #233975;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f0c29 0%, #24243e 50%, #313155 100%);
   color: white;
   position: relative;
   overflow: hidden;
-  font-family: 'Montserrat', sans-serif;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-
-  @media (max-width: 480px) {
-    padding: 1rem;
-  }
+  display: flex;
+  flex-direction: column;
 `;
 
-const BackgroundElements = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  overflow: hidden;
-  background-color: #233975;
-  pointer-events: none;
-`;
-
-const PokeBallBg = styled.div`
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+const Header = styled.header`
+  position: relative;
+  padding: 1rem 2rem;
   background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #ee1515 50%,
-    #ee1515 100%
+    135deg,
+    rgba(59, 76, 202, 0.8) 0%,
+    rgba(35, 57, 117, 0.9) 100%
   );
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  opacity: 0.15;
-  pointer-events: none;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    background: white;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 5px #333, 0 0 0 10px white;
-  }
-
-  &.ball1 {
-    top: -40px;
-    right: 10%;
-    animation: ${float} 12s ease-in-out infinite;
-  }
-
-  &.ball2 {
-    bottom: 10%;
-    left: 5%;
-    animation: ${float} 10s ease-in-out infinite reverse;
-  }
+  backdrop-filter: blur(10px);
+  border-bottom: 3px solid #ffde00;
+  flex-shrink: 0;
 
   @media (max-width: 768px) {
-    width: 120px;
-    height: 120px;
-  }
-
-  @media (max-width: 480px) {
-    width: 100px;
-    height: 100px;
-  }
-`;
-
-const GreatBallBg = styled(PokeBallBg)`
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #3b4cca 50%,
-    #3b4cca 100%
-  );
-
-  &.ball3 {
-    top: 20%;
-    right: 5%;
-    width: 100px;
-    height: 100px;
-    animation: ${float} 15s ease-in-out infinite;
-  }
-`;
-
-const UltraBallBg = styled(PokeBallBg)`
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #ffde00 50%,
-    #ffde00 100%
-  );
-
-  &.ball4 {
-    bottom: 5%;
-    right: 15%;
-    width: 120px;
-    height: 120px;
-    animation: ${float} 18s ease-in-out infinite reverse;
-  }
-`;
-
-const MasterBallBg = styled(PokeBallBg)`
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #9966ff 50%,
-    #9966ff 100%
-  );
-
-  &.ball5 {
-    top: 40%;
-    left: 8%;
-    width: 80px;
-    height: 80px;
-    animation: ${float} 14s ease-in-out infinite;
+    padding: 1rem;
   }
 `;
 
 const BackButton = styled(Link)`
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 1rem;
+  left: 1rem;
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: white;
-  text-decoration: none;
+  gap: 0.5rem;
   background: rgba(255, 255, 255, 0.1);
-  padding: 10px 15px;
-  border-radius: 30px;
-  font-weight: 500;
-  z-index: 10;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 222, 0, 0.5);
+  border-radius: 50px;
+  padding: 0.6rem 1rem;
+  color: #ffde00;
+  text-decoration: none;
+  font-weight: 600;
   transition: all 0.3s ease;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  z-index: 100;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 222, 0, 0.2);
     transform: translateX(-5px);
+    box-shadow: 0 5px 20px rgba(255, 222, 0, 0.3);
   }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+`;
+
+const HeaderContent = styled.div`
+  text-align: center;
+  margin-top: 1rem;
 `;
 
 const PageTitle = styled.h1`
-  font-size: 3rem;
-  font-weight: 800;
-  margin: 3rem 0;
-  text-align: center;
-  z-index: 1;
-  color: #ffde00;
-  -webkit-text-stroke: 2px #3b4cca;
-  text-shadow: 4px 4px 0 #3b4cca;
-  letter-spacing: 2px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffde00 0%, #ffc107 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 222, 0, 0.5);
+  margin: 0;
+  letter-spacing: 1px;
 
   @media (max-width: 768px) {
-    font-size: 2.3rem;
-    margin: 2rem 0;
-    -webkit-text-stroke: 1px #3b4cca;
+    font-size: 2rem;
   }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const PageSubtitle = styled.p`
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.3rem 0 0;
+  font-weight: 300;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
+`;
+
+const MainContent = styled.main`
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    gap: 1rem;
+  }
+`;
+
+const SectionTitle = styled.h2`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffde00;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+  svg {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+`;
+
+const GamesSection = styled.section`
+  flex-shrink: 0;
 `;
 
 const GameGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 1200px;
-  z-index: 1;
-  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-interface ColorProps {
-  $color: string;
-}
-
-const GameCard = styled(Link)<ColorProps>`
-  background: rgba(19, 42, 87, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+const GameCard = styled(Link)<{ $gradient: string; $delay: number }>`
+  display: block;
+  background: ${(props) => props.$gradient};
+  border-radius: 15px;
+  padding: 0;
   text-decoration: none;
   color: white;
-  display: flex;
-  align-items: center;
   position: relative;
   overflow: hidden;
-  border: 3px solid ${(props) => props.$color};
-  width: 350px;
+  transition: all 0.4s ease;
+  animation: ${fadeInUp} 0.6s ease ${(props) => props.$delay}s both;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  min-height: 200px;
+
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s ease;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+`;
+
+const GameCardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem 0;
+`;
+
+const GameCategory = styled.span`
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+`;
+
+const GameIconContainer = styled.div`
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+`;
+
+const GameCardBody = styled.div`
+  padding: 1rem;
+`;
+
+const GameTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+`;
+
+const GameDescription = styled.p`
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+`;
+
+const GameCardFooter = styled.div`
+  padding: 0 1rem 1rem;
+`;
+
+const PlayButton = styled.div`
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+  }
+`;
+
+const GameCardGlow = styled.div`
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 222, 0, 0.5),
+    transparent
+  );
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+
+  ${GameCard}:hover & {
+    opacity: 1;
+  }
+`;
+
+const LeaderboardSection = styled.section`
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const LeaderboardContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: none;
+  /* padding-bottom: 0.5rem; */
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ffde00;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.8rem;
+  }
+`;
+
+const PlayerCard = styled.div<{ $rank: number }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 2px solid
+    ${(props) =>
+      props.$rank === 1
+        ? '#FFD700'
+        : props.$rank === 2
+        ? '#C0C0C0'
+        : props.$rank === 3
+        ? '#CD7F32'
+        : 'rgba(255, 255, 255, 0.1)'};
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
+  flex-shrink: 0;
 
   &::before {
     content: '';
@@ -460,133 +619,142 @@ const GameCard = styled(Link)<ColorProps>`
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.1;
+    background: ${(props) =>
+      props.$rank === 1
+        ? 'linear-gradient(135deg, rgba(255, 215, 0, 0.1), transparent)'
+        : props.$rank === 2
+        ? 'linear-gradient(135deg, rgba(192, 192, 192, 0.1), transparent)'
+        : props.$rank === 3
+        ? 'linear-gradient(135deg, rgba(205, 127, 50, 0.1), transparent)'
+        : 'none'};
     z-index: 0;
   }
 
   &:hover {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 150%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-      );
-      transform: skewX(-20deg);
-      animation: ${shine} 1s;
-    }
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
 
   @media (max-width: 768px) {
-    width: 100%;
+    min-width: 160px;
+    padding: 0.8rem;
   }
 `;
 
-const PokeBallOverlay = styled.div`
-  position: absolute;
-  right: 15px;
-  bottom: 15px;
+const PlayerRank = styled.div<{ $rank: number }>`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(
-    to bottom,
-    rgba(240, 240, 240, 0.2) 0%,
-    rgba(240, 240, 240, 0.2) 50%,
-    rgba(238, 21, 21, 0.2) 50%,
-    rgba(238, 21, 21, 0.2) 100%
-  );
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.3),
-      0 0 0 4px rgba(255, 255, 255, 0.3);
-  }
-
-  ${GameCard}:hover & {
-    animation: ${pokeballWiggle} 1s ease-in-out;
-  }
-`;
-
-const GameIconContainer = styled.div<ColorProps>`
+  background: ${(props) =>
+    props.$rank === 1
+      ? 'linear-gradient(135deg, #FFD700, #FFA500)'
+      : props.$rank === 2
+      ? 'linear-gradient(135deg, #C0C0C0, #A9A9A9)'
+      : props.$rank === 3
+      ? 'linear-gradient(135deg, #CD7F32, #8B4513)'
+      : 'linear-gradient(135deg, #4ECDC4, #44A08D)'};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  color: ${(props) => props.$color};
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  margin-right: 1.2rem;
-  flex-shrink: 0;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  border: 2px solid ${(props) => props.$color};
-  position: relative;
-  z-index: 1;
-`;
-
-const GameDetails = styled.div`
-  flex: 1;
-  position: relative;
-  z-index: 1;
-`;
-
-const GameTitle = styled.h3`
-  margin: 0 0 0.5rem;
-  font-size: 1.3rem;
   font-weight: 700;
-  color: #ffde00;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-`;
-
-const GameDescription = styled.p`
-  margin: 0;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.4;
-`;
-
-const CardArrow = styled.div`
-  margin-left: 1rem;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
   position: relative;
   z-index: 1;
-
-  .arrow {
-    font-size: 1.5rem;
-    font-weight: 300;
-    opacity: 0.5;
-    transition: all 0.3s ease;
-    color: #ffde00;
-  }
-
-  ${GameCard}:hover .arrow {
-    transform: translateX(5px);
-    opacity: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  left: 0;
+  svg {
+    font-size: 1.2rem;
+    color: white;
   }
 `;
 
-const BadgeIcon = styled.div`
-  width: 18px;
-  height: 18px;
+const PlayerAvatarContainer = styled.div<{ $rank: number }>`
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 0.8rem;
+  border: 2px solid
+    ${(props) =>
+      props.$rank === 1
+        ? '#FFD700'
+        : props.$rank === 2
+        ? '#C0C0C0'
+        : props.$rank === 3
+        ? '#CD7F32'
+        : '#4ECDC4'};
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const PlayerAvatarImage = styled.img`
+  width: 70%;
+  height: 70%;
+  object-fit: cover;
+`;
+
+const PlayerBadge = styled.div<{ $rank: number }>`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: ${(props) =>
+    props.$rank === 1 ? '#FFD700' : props.$rank === 2 ? '#C0C0C0' : '#CD7F32'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  border: 2px solid white;
+  z-index: 2;
+
+  &::after {
+    content: '${(props) => props.$rank}';
+  }
+`;
+
+const PlayerInfo = styled.div`
+  text-align: center;
+  z-index: 1;
+  margin-bottom: 0.8rem;
+`;
+
+const PlayerName = styled.div`
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: white;
+`;
+
+const PlayerScore = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #ffde00;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: fit-content;
+
+  &:hover {
+    color: white;
+    transform: scale(1.05);
+  }
+`;
+
+const ScoreIcon = styled.div`
+  width: 16px;
+  height: 16px;
   background: #ffde00;
   clip-path: polygon(
     50% 0%,
@@ -600,196 +768,104 @@ const BadgeIcon = styled.div`
     2% 35%,
     39% 35%
   );
-  display: inline-block;
-  margin-right: 6px;
-  vertical-align: middle;
-`;
-
-const PlayerSection = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  background: rgba(19, 42, 87, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  z-index: 1;
-  margin-top: 1rem;
-  border: 3px solid #ffde00;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.1;
-    z-index: -1;
-    border-radius: 16px;
-  }
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 1rem;
-`;
-
-const SectionTitle = styled.h2`
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #ffde00;
-  text-shadow: 2px 2px 0 #3b4cca;
-`;
-
-const PlayerCount = styled.div`
-  background: linear-gradient(45deg, #ee1515, #3b4cca);
-  color: white;
-  padding: 0.4rem 1.2rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-`;
-
-const PlayerList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const PlayerCard = styled.div`
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  flex: 1;
-  min-width: 200px;
-  transition: all 0.3s ease;
-  position: relative;
-  border: 2px solid transparent;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.2;
-    z-index: 0;
-    border-radius: 10px;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-3px);
-    border-color: #ffde00;
-  }
-`;
-
-const PlayerAvatar = styled.img`
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 1rem;
-  border: 2px solid #ffde00;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-  position: relative;
-  z-index: 1;
-`;
-
-const PlayerInfo = styled.div`
-  flex: 1;
-  position: relative;
-  z-index: 1;
-`;
-
-const PlayerName = styled.div`
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 0.3rem;
-`;
-
-const PlayerScore = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #ffde00;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-
-  width: fit-content;
-  &:hover {
-    color: white;
-  }
 `;
 
 const EditIcon = styled.span`
-  margin-left: 0.5rem;
   opacity: 0;
   transition: all 0.2s ease;
-  color: #ffde00;
+  margin-left: 0.5rem;
 
   ${PlayerScore}:hover & {
     opacity: 1;
   }
 `;
-const PlayerAvatarContainer = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  padding: 3px;
-  margin-right: 1rem;
-  border: 3px solid #ffde00;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
+
+const PlayerActions = styled.div`
   z-index: 1;
-  background: linear-gradient(135deg, #132a57 0%, #233975 100%);
+`;
+
+const ActionButton = styled.button`
+  background: rgba(255, 222, 0, 0.2);
+  border: 2px solid #ffde00;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-
-  /* Effetto hover per evidenziare l'animazione */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  ${PlayerCard}:hover & {
-    transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  }
-`;
-const TrainerBadge = styled.div`
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  font-size: 1rem;
   color: #ffde00;
-  opacity: 0.5;
+  cursor: pointer;
   transition: all 0.3s ease;
 
-  ${PlayerCard}:hover & {
-    opacity: 1;
-    transform: rotate(15deg);
+  &:hover {
+    background: #ffde00;
+    color: #0f0c29;
+    transform: rotate(15deg) scale(1.1);
   }
 `;
-const PlayerAvatarImage = styled.img`
-  width: 70%;
-  height: 70%;
-  object-fit: contain;
-  display: block;
+
+const BackgroundElements = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+`;
+
+const FloatingPokeball = styled.div`
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #f0f0f0 50%, #ee1515 50%);
+  opacity: 0.1;
+  animation: ${float} 6s ease-in-out infinite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 3px #333, 0 0 0 6px white;
+  }
+
+  &.pokeball-1 {
+    top: 20%;
+    right: 10%;
+    animation-delay: 0s;
+  }
+
+  &.pokeball-2 {
+    bottom: 30%;
+    left: 5%;
+    animation-delay: 2s;
+  }
+
+  &.pokeball-3 {
+    top: 60%;
+    right: 20%;
+    animation-delay: 4s;
+  }
+`;
+
+const StarField = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(2px 2px at 20px 30px, #ffde00, transparent),
+    radial-gradient(2px 2px at 40px 70px, #4ecdc4, transparent),
+    radial-gradient(1px 1px at 90px 40px, #ff6b6b, transparent),
+    radial-gradient(1px 1px at 130px 80px, #ffe66d, transparent),
+    radial-gradient(2px 2px at 160px 30px, #c7ceea, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: ${twinkle} 3s ease-in-out infinite alternate;
+  opacity: 0.5;
 `;

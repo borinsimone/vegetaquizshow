@@ -8,6 +8,8 @@ import {
   FaTimes,
   FaUserAlt,
   FaHistory,
+  FaStar,
+  FaCrown,
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdClose } from 'react-icons/md';
@@ -239,6 +241,7 @@ const CategoriesGame = () => {
       ],
     },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Recupera i giocatori dal localStorage
@@ -277,12 +280,16 @@ const CategoriesGame = () => {
   ) => {
     if (question.answered || !activePlayer) return;
 
-    setCurrentQuestion({
-      category: categoryName,
-      question: question,
-      categoryColor: categoryColor,
-    });
-    setShowAnswer(false);
+    setIsLoading(true);
+    setTimeout(() => {
+      setCurrentQuestion({
+        category: categoryName,
+        question: question,
+        categoryColor: categoryColor,
+      });
+      setShowAnswer(false);
+      setIsLoading(false);
+    }, 300);
   };
 
   // E poi modifica la funzione markQuestionAsAnswered per usare l'ID
@@ -350,91 +357,169 @@ const CategoriesGame = () => {
   };
   return (
     <GameContainer>
-      <ResetButton onClick={resetQuizQuestions}>
-        <FaHistory /> Reset Quiz
-      </ResetButton>
-      <BackButton to='/game'>
-        <FaArrowLeft /> Torna ai giochi
-      </BackButton>
+      <TopBar>
+        <BackButton to='/game'>
+          <FaArrowLeft />
+          <span>Torna ai giochi</span>
+        </BackButton>
 
-      <PageTitle>Sfida Quiz Pokémon</PageTitle>
+        <ResetButton onClick={resetQuizQuestions}>
+          <FaHistory />
+          <span>Reset Quiz</span>
+        </ResetButton>
+      </TopBar>
+      <PageTitle
+        as={motion.h1}
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, type: 'spring' }}
+      >
+        🎮 Sfida Quiz Pokémon 🎮
+      </PageTitle>
+      <div
+        className='container'
+        style={{
+          display: 'flex',
+          width: '90%',
+          justifyContent: 'space-evenly',
+        }}
+      >
+        <div className='table'>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <JeopardyBoard>
+              <CategoryRow>
+                {categories.map((category, index) => (
+                  <CategoryHeader
+                    key={index}
+                    $color={category.color}
+                    as={motion.div}
+                    initial={{ y: -30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <PokeBallIcon />
+                    <CategoryName>{category.name}</CategoryName>
+                  </CategoryHeader>
+                ))}
+              </CategoryRow>
 
-      <JeopardyBoard>
-        <CategoryRow>
-          {categories.map((category, index) => (
-            <CategoryHeader
-              key={index}
-              $color={category.color}
-            >
-              <PokeBallIcon />
-              {category.name}
-            </CategoryHeader>
-          ))}
-        </CategoryRow>
+              {[0, 1, 2, 3, 4].map((rowIndex) => (
+                <QuestionRow key={rowIndex}>
+                  {categories.map((category, colIndex) => {
+                    const question = category.questions[rowIndex];
+                    return (
+                      <QuestionCell
+                        key={colIndex}
+                        $color={category.color}
+                        $answered={question.answered}
+                        onClick={() =>
+                          handleQuestionClick(
+                            category.name,
+                            question,
+                            category.color
+                          )
+                        }
+                        as={motion.div}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: (rowIndex * 5 + colIndex) * 0.05 }}
+                        whileHover={!question.answered ? { scale: 1.05 } : {}}
+                        whileTap={!question.answered ? { scale: 0.95 } : {}}
+                      >
+                        {question.answered ? (
+                          <AnsweredMark>
+                            <PokeBallCatchIcon />
+                            <CompletedText>Catturato!</CompletedText>
+                          </AnsweredMark>
+                        ) : (
+                          <PointValue>
+                            <StarIcon />
+                            {question.points}
+                            <PointSuffix>PT</PointSuffix>
+                          </PointValue>
+                        )}
+                      </QuestionCell>
+                    );
+                  })}
+                </QuestionRow>
+              ))}
+            </JeopardyBoard>
+          </motion.div>
+        </div>
 
-        {[0, 1, 2, 3, 4].map((rowIndex) => (
-          <QuestionRow key={rowIndex}>
-            {categories.map((category, colIndex) => {
-              const question = category.questions[rowIndex];
-              return (
-                <QuestionCell
-                  key={colIndex}
-                  $color={category.color}
-                  $answered={question.answered}
-                  onClick={() =>
-                    handleQuestionClick(category.name, question, category.color)
-                  }
-                >
-                  {question.answered ? (
-                    <AnsweredMark>
-                      <PokeBallCatchIcon />
-                    </AnsweredMark>
-                  ) : (
-                    <PointValue>{question.points}</PointValue>
-                  )}
-                </QuestionCell>
-              );
-            })}
-          </QuestionRow>
-        ))}
-      </JeopardyBoard>
+        <PlayerSection
+          as={motion.div}
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <SectionHeader>
+            <SectionTitle>
+              <FaCrown /> Allenatori in Gara
+            </SectionTitle>
+            <InstructionText>
+              {activePlayer
+                ? `🎯 Turno di ${activePlayer.name} - Scegli una domanda!`
+                : '👆 Seleziona un allenatore per iniziare la sfida'}
+            </InstructionText>
+          </SectionHeader>
 
-      <PlayerSection>
-        <SectionHeader>
-          <SectionTitle>Allenatori</SectionTitle>
-          <InstructionText>
-            {activePlayer
-              ? 'Scegli una casella per sfidare la tua conoscenza'
-              : 'Scegli un allenatore per iniziare'}
-          </InstructionText>
-        </SectionHeader>
+          <PlayerList>
+            {players.map((player, index) => (
+              <PlayerCard
+                key={player.id}
+                $active={activePlayer?.id === player.id}
+                onClick={() => setActivePlayer(player)}
+                as={motion.div}
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <PlayerAvatar
+                  src={player.avatar}
+                  alt={player.name}
+                />
+                <PlayerInfo>
+                  <PlayerName>{player.name}</PlayerName>
+                  <PlayerScoreDisplay>
+                    <FaStar /> {player.score} punti
+                  </PlayerScoreDisplay>
+                </PlayerInfo>
+                {activePlayer?.id === player.id && (
+                  <ActiveIndicator
+                    as={motion.div}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <FaCrown />
+                  </ActiveIndicator>
+                )}
+              </PlayerCard>
+            ))}
+          </PlayerList>
+        </PlayerSection>
+      </div>
 
-        <PlayerList>
-          {players.map((player) => (
-            <PlayerCard
-              key={player.id}
-              $active={activePlayer?.id === player.id}
-              onClick={() => setActivePlayer(player)}
-            >
-              <PlayerAvatar
-                src={player.avatar}
-                alt={player.name}
-              />
-              <PlayerInfo>
-                <PlayerName>{player.name}</PlayerName>
-                <PlayerScoreDisplay>
-                  <BadgeIcon /> {player.score} punti
-                </PlayerScoreDisplay>
-              </PlayerInfo>
-              {activePlayer?.id === player.id && (
-                <ActiveIndicator>
-                  <FaUserAlt />
-                </ActiveIndicator>
-              )}
-            </PlayerCard>
-          ))}
-        </PlayerList>
-      </PlayerSection>
+      <AnimatePresence>
+        {isLoading && (
+          <LoadingOverlay
+            as={motion.div}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <LoadingSpinner />
+            <LoadingText>Preparando la domanda...</LoadingText>
+          </LoadingOverlay>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {currentQuestion && (
@@ -443,46 +528,49 @@ const CategoriesGame = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setCurrentQuestion(null);
+                setShowAnswer(false);
+              }
+            }}
           >
             <QuestionModal
               as={motion.div}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.7, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.7, opacity: 0, y: 50 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               $color={currentQuestion.categoryColor}
             >
-              <MdClose
-                size='30px'
-                color='red'
-                style={{
-                  position: 'absolute',
-                  top: '20px',
-                  right: '50% ',
-                  transform: 'translateX(50%)',
-                  cursor: 'pointer',
-                  backgroundColor: '#d9d9d940',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '5px',
-                  zIndex: 10,
-                }}
+              <CloseButton
                 onClick={() => {
                   setCurrentQuestion(null);
                   setShowAnswer(false);
                 }}
-              />
+                as={motion.button}
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <MdClose size={24} />
+              </CloseButton>
+
               <ModalHeader>
                 <CategoryBadge $color={currentQuestion.categoryColor}>
+                  <PokeBallIcon />
                   {currentQuestion.category}
                 </CategoryBadge>
                 <PointBadge>
-                  <BadgeIcon /> {currentQuestion.question.points} punti
+                  <FaStar /> {currentQuestion.question.points} punti
                 </PointBadge>
               </ModalHeader>
 
-              <QuestionContent>
+              <QuestionContent
+                as={motion.div}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
                 {currentQuestion.question.question}
               </QuestionContent>
 
@@ -490,28 +578,42 @@ const CategoriesGame = () => {
                 {showAnswer ? (
                   <AnswerReveal
                     as={motion.div}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 200 }}
                   >
-                    <AnswerText>{currentQuestion.question.answer}</AnswerText>
+                    <AnswerText>
+                      💡 {currentQuestion.question.answer}
+                    </AnswerText>
                     <ButtonGroup>
                       <ActionButton
                         $color='#4CAF50'
                         onClick={handleCorrectAnswer}
+                        as={motion.button}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         <FaCheck /> Corretta
                       </ActionButton>
                       <ActionButton
                         $color='#EE1515'
                         onClick={handleIncorrectAnswer}
+                        as={motion.button}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         <FaTimes /> Sbagliata
                       </ActionButton>
                     </ButtonGroup>
                   </AnswerReveal>
                 ) : (
-                  <RevealButton onClick={() => setShowAnswer(true)}>
-                    <FaEye /> Mostra Risposta
+                  <RevealButton
+                    onClick={() => setShowAnswer(true)}
+                    as={motion.button}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <FaEye /> Rivela la Risposta
                   </RevealButton>
                 )}
               </AnswerSection>
@@ -522,7 +624,7 @@ const CategoriesGame = () => {
                   alt={activePlayer?.name}
                   $small
                 />
-                <span>{activePlayer?.name}</span>
+                <PlayerName>{activePlayer?.name}</PlayerName>
               </PlayerIndicator>
             </QuestionModal>
           </ModalOverlay>
@@ -542,191 +644,177 @@ const CategoriesGame = () => {
 
 export default CategoriesGame;
 
-// Animations
+// Enhanced Animations
 const float = keyframes`
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-100px) rotate(5deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
 `;
 
 const pulse = keyframes`
-  0% { transform: scale(1); }
+  0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
 `;
 
 const shine = keyframes`
-  0% { opacity: 0.3; }
-  50% { opacity: 0.8; }
-  100% { opacity: 0.3; }
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
 `;
 
-const pokeballWiggle = keyframes`
-  0% { transform: rotate(-5deg); }
-  25% { transform: rotate(5deg); }
-  50% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
-  100% { transform: rotate(0deg); }
+const shimmer = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 `;
 
-// Styled Components
+const bounce = keyframes`
+  0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+  40%, 43% { transform: translate3d(0, -30px, 0); }
+  70% { transform: translate3d(0, -15px, 0); }
+  90% { transform: translate3d(0,-4px,0); }
+`;
+
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
+// Enhanced Styled Components
 const GameContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  padding: 2rem;
-  background: #233975;
+  justify-content: flex-start;
+  padding: 1rem;
+  padding-top: 100px; /* Spazio per la TopBar fissa */
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
   color: white;
   position: relative;
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+  gap: 2rem; /* Spazio tra gli elementi */
 
-  font-family: 'Pokemon Solid', 'Montserrat', sans-serif;
+  @media (max-width: 768px) {
+    padding: 80px 0.5rem 1rem 0.5rem;
+    gap: 1.5rem;
+  }
 `;
 
-const BackgroundElements = styled.div`
+const TopBar = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  overflow: hidden;
-  background-color: #233975;
-`;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(26, 35, 126, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(255, 222, 0, 0.3);
+  z-index: 1000;
 
-const PokeBallBg = styled.div`
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #ee1515 50%,
-    #ee1515 100%
-  );
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  opacity: 0.15;
-  &::before {
-    content: '';
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    background: white;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 5px #333, 0 0 0 10px white;
-  }
-
-  &.ball1 {
-    top: -40px;
-    right: 10%;
-    animation: ${float} 12s ease-in-out infinite;
-  }
-
-  &.ball2 {
-    bottom: 10%;
-    left: 5%;
-    animation: ${float} 10s ease-in-out infinite reverse;
-  }
-`;
-
-const GreatBallBg = styled(PokeBallBg)`
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #3b4cca 50%,
-    #3b4cca 100%
-  );
-
-  &.ball3 {
-    top: 20%;
-    right: 5%;
-    width: 100px;
-    height: 100px;
-    animation: ${float} 15s ease-in-out infinite;
-  }
-`;
-
-const UltraBallBg = styled(PokeBallBg)`
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #ffde00 50%,
-    #ffde00 100%
-  );
-
-  &.ball4 {
-    bottom: 5%;
-    right: 15%;
-    width: 120px;
-    height: 120px;
-    animation: ${float} 18s ease-in-out infinite reverse;
-  }
-`;
-
-const MasterBallBg = styled(PokeBallBg)`
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #9966ff 50%,
-    #9966ff 100%
-  );
-
-  &.ball5 {
-    top: 40%;
-    left: 8%;
-    width: 80px;
-    height: 80px;
-    animation: ${float} 14s ease-in-out infinite;
+  @media (max-width: 768px) {
+    padding: 0.75rem 1rem;
   }
 `;
 
 const BackButton = styled(Link)`
-  position: fixed;
-  top: 20px;
-  left: 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: white;
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 10px 15px;
-  border-radius: 30px;
-  font-weight: 500;
-  z-index: 10;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+
+  span {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateX(-5px);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.1)
+    );
+    transform: translateX(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const ResetButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(244, 67, 54, 0.3);
+
+  span {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, #e53935, #c62828);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
   }
 `;
 
 const PageTitle = styled.h1`
-  font-size: 2.6rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 800;
   text-align: center;
-  z-index: 1;
   color: #ffde00;
-  -webkit-text-stroke: 2px #3b4cca;
-  text-shadow: 4px 4px 0 #3b4cca;
+  background: linear-gradient(45deg, #ffde00, #ffc107, #ff9800);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   letter-spacing: 2px;
-  /* margin-bottom: 1.5rem; */
+  margin: 0; /* Rimosso il margin eccessivo */
+  position: relative;
+  z-index: 10; /* Assicura che sia visibile */
 
-  @media (max-width: 768px) {
-    font-size: 2rem;
-    -webkit-text-stroke: 1px #3b4cca;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 222, 0, 0.1),
+      transparent
+    );
+    border-radius: 20px;
+    z-index: -1;
+    animation: ${shimmer} 3s ease-in-out infinite;
   }
 `;
 
@@ -735,30 +823,15 @@ const JeopardyBoard = styled.div`
   max-width: 1200px;
   display: flex;
   flex-direction: column;
-  background: rgba(19, 42, 87, 0.9);
-  border-radius: 16px;
-  /* overflow: hidden; */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  z-index: 1;
-  border: 4px solid #ffde00;
+  background: rgba(13, 27, 62, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(255, 222, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 2px solid #ffde00;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  z-index: 10; /* Assicura che sia visibile */
 `;
-
-// Utility interfaces
-interface ColorProps {
-  $color: string;
-}
-
-interface AnsweredProps {
-  $answered?: boolean;
-}
-
-interface SmallProps {
-  $small?: boolean;
-}
-
-interface ActiveProps {
-  $active?: boolean;
-}
 
 const CategoryRow = styled.div`
   display: grid;
@@ -766,100 +839,26 @@ const CategoryRow = styled.div`
   width: 100%;
 `;
 
-const PokeBallIcon = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #ee1515 50%,
-    #ee1515 100%
-  );
-  margin-right: 8px;
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 1px #333, 0 0 0 3px white;
-  }
-`;
-
-const PokeBallCatchIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(
-    to bottom,
-    #f0f0f0 0%,
-    #f0f0f0 50%,
-    #ee1515 50%,
-    #ee1515 100%
-  );
-  position: relative;
-  animation: ${pokeballWiggle} 1s ease-in-out;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: white;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 0 2px #333, 0 0 0 5px white;
-  }
-`;
-
-const BadgeIcon = styled.div`
-  width: 18px;
-  height: 18px;
-  background: #ffde00;
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 57%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 57%,
-    2% 35%,
-    39% 35%
-  );
-  display: inline-block;
-  margin-right: 6px;
-  vertical-align: middle;
-`;
-
 const CategoryHeader = styled.div<ColorProps>`
-  background: ${(props) => props.$color};
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.$color},
+    ${(props) => props.$color}dd
+  );
   color: white;
-  padding: 20px 15px;
+  padding: 1.5rem 1rem;
   text-align: center;
   font-weight: 700;
-  font-size: 1.1rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 3px solid white;
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  gap: 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
+  min-height: 100px;
 
   &::after {
     content: '';
@@ -867,13 +866,23 @@ const CategoryHeader = styled.div<ColorProps>`
     bottom: 0;
     left: 0;
     right: 0;
-    height: 5px;
+    height: 3px;
     background: rgba(0, 0, 0, 0.2);
   }
 
   @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 15px 10px;
+    font-size: 0.8rem;
+    padding: 1rem 0.5rem;
+    min-height: 80px;
+  }
+`;
+
+const CategoryName = styled.span`
+  font-size: 0.9rem;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
   }
 `;
 
@@ -885,92 +894,168 @@ const QuestionRow = styled.div`
 
 const QuestionCell = styled.div<ColorProps & AnsweredProps>`
   background: ${(props) =>
-    props.$answered ? 'rgba(19, 42, 87, 0.7)' : 'rgba(19, 42, 87, 0.95)'};
-  color: ${(props) => props.$color};
+    props.$answered
+      ? 'linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(56, 142, 60, 0.2))'
+      : 'linear-gradient(135deg, rgba(13, 27, 62, 0.8), rgba(21, 39, 78, 0.9))'};
+  color: ${(props) => (props.$answered ? '#81C784' : props.$color)};
   height: 100px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: ${(props) => (props.$answered ? 'default' : 'pointer')};
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  opacity: ${(props) => (props.$answered ? 0.8 : 1)};
+  border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.1;
-    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${(props) =>
+      !props.$answered
+        ? `radial-gradient(circle at center, ${props.$color}15, transparent)`
+        : 'none'};
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
   ${(props) =>
     !props.$answered &&
     css`
       &:hover {
-        transform: scale(1.03);
-        box-shadow: 0 0 20px ${props.$color};
+        transform: scale(1.02);
+        box-shadow: 0 0 20px ${props.$color}40, inset 0 0 20px ${props.$color}20;
+        border: 2px solid ${props.$color};
         z-index: 1;
 
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          border: 2px solid ${props.$color};
+        &::before {
+          opacity: 1;
         }
       }
     `}
 
   @media (max-width: 768px) {
-    height: 70px;
+    height: 80px;
   }
 `;
 
 const PointValue = styled.div`
-  font-size: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 1.8rem;
   font-weight: 800;
-  text-shadow: 0 3px 4px rgba(0, 0, 0, 0.5);
-  position: relative;
-  z-index: 1;
-
-  &::after {
-    content: 'P';
-    font-size: 1rem;
-    vertical-align: super;
-    margin-left: 2px;
-  }
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 
   @media (max-width: 768px) {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
+`;
+
+const StarIcon = styled(FaStar)`
+  font-size: 1rem;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+`;
+
+const PointSuffix = styled.span`
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.8;
 `;
 
 const AnsweredMark = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  animation: ${bounce} 1s ease-out;
+`;
+
+const CompletedText = styled.span`
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #81c784;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+`;
+
+const PokeBallIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    #f0f0f0 45%,
+    #333 45%,
+    #333 55%,
+    #ee1515 55%
+  );
   position: relative;
-  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 1px #333;
+  }
+`;
+
+const PokeBallCatchIcon = styled.div`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    #f0f0f0 45%,
+    #333 45%,
+    #333 55%,
+    #4caf50 55%
+  );
+  position: relative;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 2px #333;
+  }
 `;
 
 const PlayerSection = styled.div`
-  width: 100%;
+  width: 20vw;
   max-width: 1200px;
-  background: rgba(19, 42, 87, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  z-index: 1;
-  margin-top: 2rem;
-  border: 3px solid #ffde00;
+  background: rgba(13, 27, 62, 0.9);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 2px solid rgba(255, 222, 0, 0.4);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 10; /* Assicura che sia visibile */
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
 `;
 
 const SectionHeader = styled.div`
@@ -978,13 +1063,13 @@ const SectionHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(255, 222, 0, 0.3);
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 1rem;
   }
 `;
 
@@ -993,25 +1078,29 @@ const SectionTitle = styled.h2`
   font-size: 1.5rem;
   font-weight: 700;
   color: #ffde00;
-  text-shadow: 2px 2px 0 #3b4cca;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 `;
 
 const InstructionText = styled.div`
   color: rgba(255, 255, 255, 0.9);
-  font-style: italic;
-  font-size: 0.9rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 6px 12px;
+  font-size: 0.95rem;
+  background: rgba(255, 222, 0, 0.1);
+  padding: 8px 16px;
   border-radius: 20px;
+  border: 1px solid rgba(255, 222, 0, 0.4);
+  backdrop-filter: blur(5px);
 `;
 
 const PlayerList = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 1rem;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -1020,59 +1109,44 @@ const PlayerCard = styled.div<ActiveProps>`
   align-items: center;
   background: ${(props) =>
     props.$active
-      ? 'linear-gradient(135deg, rgba(255, 222, 0, 0.2), rgba(59, 76, 202, 0.2))'
+      ? 'linear-gradient(135deg, rgba(255, 222, 0, 0.2), rgba(255, 193, 7, 0.1))'
       : 'rgba(255, 255, 255, 0.08)'};
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  flex: 1;
-  min-width: 200px;
+  border-radius: 16px;
+  padding: 1rem;
   transition: all 0.3s ease;
   position: relative;
-  border: 2px solid ${(props) => (props.$active ? '#FFDE00' : 'transparent')};
+  border: 2px solid
+    ${(props) => (props.$active ? '#FFDE00' : 'rgba(255, 255, 255, 0.1)')};
   cursor: pointer;
+  backdrop-filter: blur(10px);
 
   ${(props) =>
     props.$active &&
     css`
+      box-shadow: 0 0 20px rgba(255, 222, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
       animation: ${pulse} 2s infinite ease-in-out;
-      box-shadow: 0 0 15px rgba(255, 222, 0, 0.4);
     `}
 
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
     transform: translateY(-3px);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.2;
-    z-index: 0;
-    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
 `;
 
 const PlayerAvatar = styled.img<SmallProps>`
-  width: ${(props) => (props.$small ? '30px' : '45px')};
-  height: ${(props) => (props.$small ? '30px' : '45px')};
+  width: ${(props) => (props.$small ? '32px' : '50px')};
+  height: ${(props) => (props.$small ? '32px' : '50px')};
   border-radius: 50%;
   object-fit: cover;
   margin-right: 1rem;
-  border: 2px solid #ffde00;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-  position: relative;
-  z-index: 1;
+  border: 3px solid #ffde00;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 `;
 
 const PlayerInfo = styled.div`
   flex: 1;
-  position: relative;
-  z-index: 1;
 `;
 
 const PlayerName = styled.div`
@@ -1085,26 +1159,57 @@ const PlayerName = styled.div`
 const PlayerScoreDisplay = styled.div`
   display: flex;
   align-items: center;
+  gap: 6px;
   font-size: 0.9rem;
   color: #ffde00;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
 `;
 
 const ActiveIndicator = styled.div`
   position: absolute;
   top: -8px;
   right: -8px;
-  background: #ee1515;
-  width: 24px;
-  height: 24px;
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid white;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  z-index: 2;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   animation: ${shine} 2s infinite;
+`;
+
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+`;
+
+const LoadingSpinner = styled.div`
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 222, 0, 0.3);
+  border-top: 4px solid #ffde00;
+  border-radius: 50%;
+  animation: ${spin} 1s linear infinite;
+  margin-bottom: 1rem;
+`;
+
+const LoadingText = styled.div`
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
 `;
 
 const ModalOverlay = styled.div`
@@ -1113,37 +1218,50 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 1000;
   padding: 1rem;
 `;
 
 const QuestionModal = styled.div<ColorProps>`
-  background: radial-gradient(circle at top left, #233975 0%, #132a57 100%);
-  border-radius: 16px;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  border-radius: 20px;
   width: 100%;
   max-width: 700px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(255, 222, 0, 0.5);
   display: flex;
   flex-direction: column;
   position: relative;
-  border: 3px solid #ffde00;
-  overflow: hidden;
+  border: 2px solid #ffde00;
+`;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.1;
-    z-index: 0;
+const CloseButton = styled.button`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(244, 67, 54, 0.9);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(244, 67, 54, 1);
   }
 `;
 
@@ -1151,94 +1269,79 @@ const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  padding: 1.5rem 2rem;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
-`;
 
-const CategoryBadge = styled.div<ColorProps>`
-  background: ${(props) => props.$color || '#00ccff'};
-  color: white;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    margin-right: 8px;
+  @media (max-width: 768px) {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
   }
 `;
 
-const PointBadge = styled.div`
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffde00;
-  padding: 5px 15px;
-  border-radius: 20px;
+const CategoryBadge = styled.div<ColorProps>`
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.$color},
+    ${(props) => props.$color}dd
+  );
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
   font-size: 0.9rem;
   font-weight: 600;
-  border: 1px solid rgba(255, 222, 0, 0.3);
   display: flex;
   align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+`;
+
+const PointBadge = styled.div`
+  background: rgba(255, 222, 0, 0.2);
+  color: #ffde00;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 222, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(10px);
 `;
 
 const QuestionContent = styled.div`
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 1.6rem;
+  font-weight: 600;
   text-align: center;
-  padding: 40px 30px;
+  padding: 3rem 2rem;
   color: white;
-  min-height: 180px;
+  min-height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1.4;
   position: relative;
-  z-index: 1;
-
-  &::before,
-  &::after {
-    content: '?';
-    position: absolute;
-    font-size: 8rem;
-    opacity: 0.06;
-    color: white;
-    z-index: -1;
-  }
-
-  &::before {
-    top: 20px;
-    left: 30px;
-  }
-
-  &::after {
-    bottom: 20px;
-    right: 30px;
-  }
+  background: rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    font-size: 1.4rem;
-    padding: 30px 20px;
-    min-height: 140px;
+    font-size: 1.3rem;
+    padding: 2rem 1.5rem;
+    min-height: 120px;
   }
 `;
 
 const AnswerSection = styled.div`
-  padding: 20px 30px 40px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 120px;
-  position: relative;
-  z-index: 1;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
 `;
 
 const AnswerReveal = styled.div`
@@ -1246,42 +1349,48 @@ const AnswerReveal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1.5rem;
 `;
 
 const AnswerText = styled.div`
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 600;
   text-align: center;
   color: #ffde00;
-  margin-bottom: 30px;
   line-height: 1.5;
-  padding: 10px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
   border: 1px solid rgba(255, 222, 0, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 
   @media (max-width: 768px) {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    padding: 1rem;
   }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 15px;
+  gap: 1rem;
 
-  @media (max-width: 500px) {
+  @media (max-width: 480px) {
     flex-direction: column;
     width: 100%;
   }
 `;
 
 const ActionButton = styled.button<ColorProps>`
-  background: ${(props) => props.$color};
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.$color},
+    ${(props) => props.$color}dd
+  );
   color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 50px;
+  padding: 12px 30px;
+  border-radius: 30px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -1289,30 +1398,27 @@ const ActionButton = styled.button<ColorProps>`
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  min-width: 140px;
+  justify-content: center;
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 7px 0 rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   }
 
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 500px) {
+  @media (max-width: 480px) {
     width: 100%;
-    justify-content: center;
+    padding: 15px;
   }
 `;
 
 const RevealButton = styled.button`
-  background: linear-gradient(135deg, #3b4cca, #0a1f5c);
+  background: linear-gradient(135deg, #3b4cca, #283593);
   color: white;
   border: none;
-  padding: 12px 30px;
-  border-radius: 50px;
+  padding: 15px 40px;
+  border-radius: 30px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -1320,16 +1426,17 @@ const RevealButton = styled.button`
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 
   &:hover {
+    background: linear-gradient(135deg, #303f9f, #1a237e);
     transform: translateY(-3px);
-    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   }
 
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+  @media (max-width: 480px) {
+    width: 100%;
+    justify-content: center;
   }
 `;
 
@@ -1337,44 +1444,122 @@ const PlayerIndicator = styled.div`
   position: absolute;
   bottom: 15px;
   right: 20px;
-
-  background: linear-gradient(to right, #ee1515, #3b4cca);
+  background: linear-gradient(135deg, #ff9800, #f57c00);
   color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
+  padding: 8px 16px;
+  border-radius: 25px;
   font-size: 0.9rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
-  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   border: 2px solid white;
+  backdrop-filter: blur(10px);
 `;
-const ResetButton = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(238, 21, 21, 0.8);
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
 
-  &:hover {
-    background: #ee1515;
-    transform: scale(1.05);
+const BackgroundElements = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Messo dietro a tutto */
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+`;
+
+const PokeBallBg = styled.div`
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    #f0f0f0 45%,
+    #333 45%,
+    #333 55%,
+    #ee1515 55%
+  );
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  opacity: 0.05; /* Ridotta opacità per non interferire */
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 5px #333;
   }
 
-  &:active {
-    transform: scale(0.98);
+  &.ball1 {
+    top: 10%;
+    right: 10%;
+    animation: ${float} 8s ease-in-out infinite;
+  }
+
+  &.ball2 {
+    bottom: 20%;
+    left: 5%;
+    animation: ${float} 10s ease-in-out infinite reverse;
+  }
+`;
+
+const GreatBallBg = styled(PokeBallBg)`
+  background: linear-gradient(
+    to bottom,
+    #f0f0f0 45%,
+    #333 45%,
+    #333 55%,
+    #3b4cca 55%
+  );
+
+  &.ball3 {
+    top: 30%;
+    right: 5%;
+    width: 100px;
+    height: 100px;
+    animation: ${float} 12s ease-in-out infinite;
+  }
+`;
+
+const UltraBallBg = styled(PokeBallBg)`
+  background: linear-gradient(
+    to bottom,
+    #f0f0f0 45%,
+    #333 45%,
+    #333 55%,
+    #ffde00 55%
+  );
+
+  &.ball4 {
+    bottom: 10%;
+    right: 15%;
+    width: 120px;
+    height: 120px;
+    animation: ${float} 15s ease-in-out infinite reverse;
+  }
+`;
+
+const MasterBallBg = styled(PokeBallBg)`
+  background: linear-gradient(
+    to bottom,
+    #f0f0f0 45%,
+    #333 45%,
+    #333 55%,
+    #9966ff 55%
+  );
+
+  &.ball5 {
+    top: 50%;
+    left: 8%;
+    width: 80px;
+    height: 80px;
+    animation: ${float} 14s ease-in-out infinite;
   }
 `;

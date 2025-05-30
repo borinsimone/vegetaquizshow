@@ -176,66 +176,108 @@ const float = keyframes`
 const GameContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
+  height: 100vh;
+  padding: 1rem;
   position: relative;
   overflow: hidden;
 `;
 
 const BackButton = styled(Link)`
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(19, 42, 87, 0.8);
+  top: 1rem;
+  left: 1rem;
+  background: rgba(19, 42, 87, 0.9);
   color: white;
-  padding: 8px 15px;
-  border-radius: 20px;
+  padding: 0.6rem 1rem;
+  border-radius: 25px;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   font-weight: 600;
   border: 2px solid #ffde00;
   transition: all 0.3s ease;
   z-index: 10;
+  font-size: 0.9rem;
 
   &:hover {
     background: #3b4cca;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateX(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
   }
 `;
 
 const PageTitle = styled.h1`
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #ffde00;
   text-shadow: 3px 3px 0 #3b4cca;
-  margin-bottom: 1.5rem;
+  margin: 0;
   text-align: center;
   z-index: 1;
+  margin-top: 4rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+  }
 `;
 
 const GameInstructions = styled.p`
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.5rem 0 1rem;
   z-index: 1;
+  font-size: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    margin: 0.3rem 0 0.8rem;
+  }
 `;
 
 const CardGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
   width: 100%;
-  max-width: 1024px;
-  margin: auto 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex: 1;
+  align-content: start;
   z-index: 1;
+  padding: 0 1rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ffde00;
+    border-radius: 10px;
+  }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.8rem;
+    padding: 0 0.5rem;
+    max-height: calc(100vh - 160px);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
   }
 `;
 
@@ -446,29 +488,46 @@ interface PokemonCardProps {
 }
 
 const PokemonCard = styled.div<PokemonCardProps>`
-  /* perspective: 1000px; */
-  width: 150px;
-  cursor: ${(props) => (props.$guessed ? 'default' : 'pointer')};
+  width: 100%;
   aspect-ratio: 2.5 / 3.5;
-  transition: transform 0.3s, opacity 0.3s;
+  cursor: ${(props) => (props.$guessed ? 'default' : 'pointer')};
+  transition: all 0.3s ease;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  border: 2px solid
-    ${(props) => (props.$guessed ? 'rgba(255, 255, 255, 0.5)' : '#ffde00')};
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  border: 3px solid
+    ${(props) => (props.$guessed ? 'rgba(255, 255, 255, 0.3)' : '#ffde00')};
+  background: ${(props) =>
+    props.$guessed ? 'rgba(0, 0, 0, 0.2)' : 'transparent'};
 
   &:hover {
-    transform: ${(props) => (props.$guessed ? 'none' : 'scale(1.05)')};
+    transform: ${(props) =>
+      props.$guessed ? 'none' : 'translateY(-8px) scale(1.05)'};
+    box-shadow: ${(props) =>
+      props.$guessed
+        ? '0 8px 25px rgba(0, 0, 0, 0.4)'
+        : '0 15px 35px rgba(255, 222, 0, 0.4)'};
   }
 
   img {
-    width: ${(props) => (props.$guessed ? '100%' : '330%')};
+    width: ${(props) => (props.$guessed ? '100%' : '300%')};
     height: ${(props) => (props.$guessed ? '100%' : 'auto')};
     object-fit: ${(props) => (props.$guessed ? 'cover' : 'contain')};
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+
+    &:hover {
+      transform: ${(props) =>
+        props.$guessed ? 'none' : 'translateY(-5px) scale(1.03)'};
+    }
   }
 `;
 
@@ -480,15 +539,19 @@ const GuessedCardOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(0, 0, 0, 0.2)
+  );
   overflow: hidden;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(100%); /* Rendi l'immagine in bianco e nero */
-    opacity: 0.8; /* Opacità ridotta */
+    filter: grayscale(100%) brightness(0.7);
+    opacity: 0.8;
   }
 
   &::after {
@@ -498,8 +561,25 @@ const GuessedCardOverlay = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.1); /* Leggera sfumatura scura */
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.3),
+      rgba(59, 76, 202, 0.2)
+    );
     pointer-events: none;
+  }
+
+  &::before {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: #78c850;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    z-index: 2;
+    opacity: 0.9;
   }
 `;
 
@@ -508,11 +588,22 @@ const GuessedLabel = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(19, 42, 87, 0.8);
+  background: linear-gradient(
+    to top,
+    rgba(19, 42, 87, 0.95),
+    rgba(19, 42, 87, 0.8)
+  );
   color: white;
-  padding: 5px;
+  padding: 0.5rem 0.3rem;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.8rem;
   font-weight: bold;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  border-top: 2px solid rgba(255, 222, 0, 0.5);
+  z-index: 3;
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.2rem;
+  }
 `;
