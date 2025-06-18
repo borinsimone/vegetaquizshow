@@ -1,16 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  FaArrowLeft,
-  FaPlay,
-  FaPause,
-  FaVolumeUp,
-  FaCheck,
-  FaTimes,
-} from 'react-icons/fa';
+import { FaArrowLeft, FaPlay, FaPause, FaCheck, FaTimes } from 'react-icons/fa';
 import { useGlobalContext } from '../../../context/GlobalContext';
-const test = new URL('./assets/audio/abtn.mp3', import.meta.url).href;
+import test from '../../../assets/audio/versi/pikachu.mp3'; // Importa un suono di esempio
+
 // Esempi di suoni Pokémon (dovresti sostituire questi con percorsi ai file audio reali)
 const POKEMON_SOUNDS = [
   {

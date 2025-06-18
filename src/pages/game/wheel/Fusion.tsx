@@ -124,7 +124,6 @@ function Fusion() {
   const [guessInputs, setGuessInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [showHint, setShowHint] = useState(false);
   const [revealedComponents, setRevealedComponents] = useState(false);
   const [correctGuesses, setCorrectGuesses] = useState([]);
 
@@ -193,11 +192,6 @@ function Fusion() {
     }
   };
 
-  // Toggle hint (show component Pokemon)
-  const toggleHint = () => {
-    setShowHint(!showHint);
-  };
-
   // Reveal the component Pokemon
   const revealComponents = () => {
     setRevealedComponents(true);
@@ -250,33 +244,6 @@ function Fusion() {
                     Fusione di {selectedFusion.components.length} Pokémon
                   </FusionLabel>
                 </FusionImageContainer>
-
-                <HintButton onClick={toggleHint}>
-                  {showHint ? <FaEyeSlash /> : <FaEye />}
-                  {showHint ? ' Nascondi Aiuto' : ' Mostra Aiuto'}
-                </HintButton>
-
-                {showHint && (
-                  <HintSection>
-                    <HintText>Componenti della fusione (offuscati):</HintText>
-                    <ComponentPokemon>
-                      {selectedFusion.components.map((component, index) => (
-                        <React.Fragment key={index}>
-                          <PokemonComponent>
-                            <BlurredImage
-                              src={component.image}
-                              alt={`Pokémon ${index + 1}`}
-                            />
-                            <ComponentName>Pokémon {index + 1}</ComponentName>
-                          </PokemonComponent>
-                          {index < selectedFusion.components.length - 1 && (
-                            <PlusSign>+</PlusSign>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </ComponentPokemon>
-                  </HintSection>
-                )}
               </FusionDisplay>
 
               {revealedComponents ? (
@@ -573,41 +540,15 @@ const FusionLabel = styled.div`
 `;
 
 const HintButton = styled.button`
-  background: rgba(59, 76, 202, 0.8);
-  color: white;
-  border: 2px solid #3b4cca;
-  border-radius: 20px;
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: #3b4cca;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(59, 76, 202, 0.3);
-  }
+  display: none;
 `;
 
 const HintSection = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1.5rem;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 222, 0, 0.3);
-  animation: ${fadeIn} 0.5s ease;
-  width: 100%;
-  max-width: 500px;
+  display: none;
 `;
 
 const HintText = styled.p`
-  color: #ffde00;
-  text-align: center;
-  margin-bottom: 1rem;
-  font-weight: 600;
+  display: none;
 `;
 
 const ComponentPokemon = styled.div`

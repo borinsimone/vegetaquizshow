@@ -1,33 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  GuessFormContainer,
+  GuessForm as GuessFormSection,
+  GuessTitle,
   GuessInput,
   SubmitButton,
 } from '../styles/CityStyles';
 
-const GuessForm = ({ value, onChange, onSubmit, disabled }) => {
+const GuessForm = ({ onGuess }) => {
+  const [guess, setGuess] = useState('');
+
+  const handleSubmit = () => {
+    if (guess.trim()) {
+      onGuess(guess);
+      setGuess('');
+    }
+  };
+
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !disabled) {
-      onSubmit();
+    if (e.key === 'Enter') {
+      handleSubmit();
     }
   };
 
   return (
-    <GuessFormContainer>
+    <GuessFormSection>
+      <GuessTitle>Indovina la città:</GuessTitle>
       <GuessInput
         type='text'
-        value={value}
-        onChange={onChange}
+        value={guess}
+        onChange={(e) => setGuess(e.target.value)}
         onKeyPress={handleKeyPress}
-        placeholder='Nome della città...'
+        placeholder='Scrivi il nome della città...'
       />
       <SubmitButton
-        onClick={onSubmit}
-        disabled={disabled}
+        onClick={handleSubmit}
+        disabled={!guess.trim()}
       >
-        Indovina
+        Conferma
       </SubmitButton>
-    </GuessFormContainer>
+    </GuessFormSection>
   );
 };
 

@@ -16,11 +16,21 @@ import {
 
 const HintPanel = ({
   hints,
+  usedHints = [],
   isHintUsed,
   onBuyHint,
   playerScore,
   onPlaySound,
 }) => {
+  const checkIfHintUsed = (hintContent) => {
+    if (isHintUsed) {
+      return isHintUsed(hintContent);
+    }
+    return usedHints.some(
+      (hint) => hint.content === hintContent || hint === hintContent
+    );
+  };
+
   return (
     <HintSection>
       <HintTitle>Indizi Disponibili:</HintTitle>
@@ -28,18 +38,20 @@ const HintPanel = ({
         {hints.map((hint, index) => (
           <HintItem
             key={index}
-            $used={isHintUsed(hint.content)}
+            $used={checkIfHintUsed(hint.content)}
           >
             <HintIcon>
               {hint.type === 'text' ? <FaLightbulb /> : <FaVolumeUp />}
             </HintIcon>
             <HintInfo>
-              {isHintUsed(hint.content) ? (
+              {checkIfHintUsed(hint.content) ? (
                 <HintContent>
                   {hint.type === 'text' ? (
                     hint.content
                   ) : (
-                    <SoundPlayButton onClick={onPlaySound}>
+                    <SoundPlayButton
+                      onClick={() => onPlaySound && onPlaySound()}
+                    >
                       Riproduci tema musicale <FaVolumeUp />
                     </SoundPlayButton>
                   )}
@@ -52,11 +64,11 @@ const HintPanel = ({
                 </HintMasked>
               )}
               <HintCost>
-                {isHintUsed(hint.content) ? (
+                {checkIfHintUsed(hint.content) ? (
                   'Già sbloccato'
                 ) : (
                   <BuyButton
-                    onClick={() => onBuyHint(hint)}
+                    onClick={() => onBuyHint && onBuyHint(hint)}
                     disabled={playerScore < hint.cost}
                   >
                     Sblocca ({hint.cost} punti)

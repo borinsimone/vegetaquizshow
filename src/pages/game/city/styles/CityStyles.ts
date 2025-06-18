@@ -17,21 +17,224 @@ export const pulse = keyframes`
   100% { transform: scale(1); }
 `;
 
-// Layout orizzontale per CityGame
-export const HorizontalGameLayout = styled.div`
+// Additional animations from JS file
+export const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+export const slideIn = keyframes`
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+`;
+
+export const bounce = keyframes`
+  0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+  40%, 43% { transform: translate3d(0, -30px, 0); }
+  70% { transform: translate3d(0, -15px, 0); }
+  90% { transform: translate3d(0, -4px, 0); }
+`;
+
+export const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
+export const scoreGlow = keyframes`
+  0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+`;
+
+// Enhanced GameContainer with modern gradient
+export const GameContainer = styled.div`
+  width: 100%;
+  min-height: 100vh;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-attachment: fixed;
+  color: white;
+  overflow-x: hidden;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>')
+      repeat;
+    animation: ${slideIn} 20s linear infinite;
+    pointer-events: none;
+  }
+`;
+
+// Enhanced PlayerBanner
+export const PlayerBanner = styled.div`
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: ${fadeIn} 0.6s ease-out;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
+`;
+
+export const PlayerInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+`;
+
+export const PlayerAvatar = styled.div`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  display: flex;
+  align-items: center;
   justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  animation: ${bounce} 2s infinite;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+`;
+
+export const PlayerName = styled.h2`
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+`;
+
+export const PlayerLevel = styled.div`
+  font-size: 0.9rem;
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.2rem 0.8rem;
+  border-radius: 15px;
+  display: inline-block;
+  margin: 0.2rem 0;
+`;
+
+export const PlayerScore = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+
+  &.score-changed {
+    animation: ${scoreGlow} 1s ease-in-out;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+`;
+
+export const ScoreAnimation = styled.div`
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: ${slideIn} 1s ease-in-out;
+`;
+
+export const GameProgress = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: white;
+  min-width: 200px;
+
+  span {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    min-width: 150px;
+    font-size: 0.8rem;
+  }
+`;
+
+export const ProgressBar = styled.div`
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+export const ProgressFill = styled.div`
+  height: 100%;
+  background: linear-gradient(90deg, #4ecdc4, #44a08d);
+  border-radius: 4px;
+  transition: width 0.5s ease-in-out;
+  box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+`;
+
+// Enhanced Layout
+export const HorizontalGameLayout = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
+  animation: ${fadeIn} 0.8s ease-out 0.2s both;
   width: 100%;
   max-width: 1200px;
   margin-top: 2rem;
   z-index: 1;
 
-  @media (max-width: 900px) {
-    flex-direction: column;
-    align-items: center;
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 `;
 
@@ -56,30 +259,26 @@ export const RightColumn = styled.div`
   }
 `;
 
-// Contenitore immagine città
+// Enhanced CityImageContainer
 export const CityImageContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 500px;
-  aspect-ratio: 1 / 1;
-  border-radius: 15px;
+  height: 400px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 3px solid #ffde00;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+  cursor: pointer;
+  transition: all 0.3s ease;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.1),
-      rgba(0, 0, 0, 0.3)
-    );
-    z-index: 1;
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    height: 250px;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -87,44 +286,82 @@ export const CityImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: all 0.5s ease;
+  filter: brightness(1.05) contrast(1.1);
+
+  &:hover {
+    filter: brightness(1.1) contrast(1.15);
+  }
 `;
 
-// Pannello indizi migliorato
+export const ImageLoadingOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 2;
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e3e3e3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: ${spin} 1s linear infinite;
+  }
+
+  span {
+    color: #6c757d;
+    font-weight: 500;
+  }
+`;
+
+// Enhanced Hint Panel Components
 export const HintSection = styled.div`
-  background: rgba(19, 42, 87, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   padding: 1.5rem;
-  border-radius: 15px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: ${fadeIn} 0.6s ease-out 0.4s both;
   width: 100%;
-  border: 2px solid rgba(255, 222, 0, 0.5);
 `;
 
 export const HintTitle = styled.h3`
-  color: #ffde00;
-  margin: 0 0 1rem 0;
-  font-size: 1.2rem;
-  text-shadow: 1px 1px 0 #3b4cca;
+  color: #333;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
 `;
 
 export const HintsList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
   padding-right: 0.5rem;
 
-  /* Scrollbar custom styling */
   &::-webkit-scrollbar {
     width: 6px;
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #ffde00;
+    background: linear-gradient(45deg, #667eea, #764ba2);
     border-radius: 10px;
   }
 `;
@@ -134,70 +371,111 @@ export const HintItem = styled.div<{ $used: boolean }>`
   align-items: center;
   gap: 1rem;
   background: ${({ $used }) =>
-    $used ? 'rgba(59, 76, 202, 0.3)' : 'rgba(0, 0, 0, 0.2)'};
+    $used ? 'rgba(76, 175, 80, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
   padding: 1rem;
-  border-radius: 10px;
-  border-left: 3px solid
-    ${({ $used }) => ($used ? '#ffde00' : 'rgba(255, 255, 255, 0.2)')};
-  transition: all 0.3s;
+  border-radius: 15px;
+  border-left: 4px solid
+    ${({ $used }) => ($used ? '#4caf50' : 'rgba(0, 0, 0, 0.2)')};
+  transition: all 0.3s ease;
+  cursor: ${({ $used }) => ($used ? 'default' : 'pointer')};
 
   &:hover {
     background: ${({ $used }) =>
-      $used ? 'rgba(59, 76, 202, 0.4)' : 'rgba(0, 0, 0, 0.3)'};
+      $used ? 'rgba(76, 175, 80, 0.15)' : 'rgba(0, 0, 0, 0.1)'};
+    transform: translateX(5px);
   }
 `;
 
 export const HintIcon = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  background: #ffde00;
-  color: #3b4cca;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
   flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 `;
 
 export const HintInfo = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `;
 
 export const HintContent = styled.div`
-  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 500;
 `;
 
 export const HintMasked = styled.div`
-  color: rgba(255, 255, 255, 0.6);
+  color: #666;
   font-style: italic;
+  font-size: 0.95rem;
 `;
 
 export const HintCost = styled.div`
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 0.85rem;
+  color: #666;
 `;
 
-// Form per indovinare
+export const SoundPlayButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    animation: ${bounce} 1s infinite;
+  }
+
+  svg {
+    font-size: 1rem;
+  }
+`;
+
+// Enhanced Form Components
 export const GuessForm = styled.div`
-  background: rgba(19, 42, 87, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   padding: 1.5rem;
-  border-radius: 15px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: ${fadeIn} 0.6s ease-out 0.6s both;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border: 2px solid rgba(255, 222, 0, 0.5);
 `;
 
+export const GuessFormContainer = styled(GuessForm)``;
+
 export const GuessTitle = styled.h3`
-  color: #ffde00;
-  margin: 0 0 0.5rem 0;
+  color: #333;
+  margin: 0 0 1rem 0;
   font-size: 1.2rem;
-  text-shadow: 1px 1px 0 #3b4cca;
+  font-weight: 700;
+  text-align: center;
 `;
 
 export const GuessInputWrapper = styled.div`
@@ -208,146 +486,276 @@ export const GuessInput = styled.input`
   width: 100%;
   padding: 12px 16px;
   font-size: 1rem;
-  border: none;
-  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 3px #ffde00, 0 5px 15px rgba(255, 222, 0, 0.4);
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
   }
 `;
 
 export const SubmitButton = styled.button`
   width: 100%;
-  padding: 14px 20px;
-  background: #ee1515;
+  padding: 12px 20px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
   color: white;
   border: none;
-  border-radius: 10px;
-  font-weight: bold;
+  border-radius: 15px;
+  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 
   &:hover:not(:disabled) {
-    background: #d10000;
     transform: translateY(-2px);
     box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
   }
 
-  &:active:not(:disabled) {
-    transform: translateY(1px);
-  }
-
   &:disabled {
-    background: #888;
+    background: #ccc;
     cursor: not-allowed;
+    transform: none;
   }
 `;
 
-// Banner del player
-export const PlayerBanner = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+// Enhanced Result Components
+export const ResultBox = styled.div<{ $correct: boolean }>`
   width: 100%;
-  max-width: 1200px;
-  margin-bottom: 1.5rem;
-  background: rgba(19, 42, 87, 0.7);
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(255, 222, 0, 0.5);
-  z-index: 1;
-`;
-
-// Stili per il bottone di riproduzione audio
-export const SoundPlayButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(59, 76, 202, 0.6);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(59, 76, 202, 0.8);
-    transform: translateY(-2px);
-    animation: ${pulse} 1s infinite;
-  }
-
-  svg {
-    color: #ffde00;
-  }
-`;
-
-// Contenitori principali
-export const GameContainer = styled.div`
-  width: 100%;
-  min-height: 100vh;
+  max-width: 500px;
+  background: ${({ $correct }) =>
+    $correct
+      ? 'linear-gradient(135deg, #4caf50, #66bb6a)'
+      : 'linear-gradient(135deg, #f44336, #ef5350)'};
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 1rem;
-  position: relative;
-  background-color: #0a1428;
+  gap: 1.5rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  animation: ${fadeIn} 0.5s ease, ${bounce} 0.5s ease 0.2s;
   color: white;
-  overflow-x: hidden;
-`;
-
-export const LoadingText = styled.div`
-  font-size: 1.5rem;
-  color: white;
-  margin-top: 3rem;
-`;
-
-export const PageTitle = styled.h1`
-  font-size: 2.5rem;
-  color: #ffde00;
-  text-shadow: 3px 3px 0 #3b4cca;
-  margin-bottom: 1.5rem;
   text-align: center;
   z-index: 1;
+`;
+
+export const ResultIcon = styled.div`
+  font-size: 4rem;
+  color: white;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: ${bounce} 1s infinite;
+`;
+
+export const ResultTitle = styled.h2`
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+`;
+
+export const ResultDetails = styled.p`
+  font-size: 1.3rem;
+  margin: 0;
+  line-height: 1.4;
+  opacity: 0.95;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    width: 100%;
+  }
+`;
+
+export const ResultButton = styled.button`
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 24px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+`;
+
+// Enhanced City Stats Components
+export const CityStatsContainer = styled.div`
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: ${fadeIn} 0.6s ease-out;
+  z-index: 1;
+`;
+
+export const CityStatsHeader = styled.h3`
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+`;
+
+export const CityStatsBadges = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0;
+`;
+
+export const CityBadge = styled.div<{ $guessed: boolean }>`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${({ $guessed }) =>
+    $guessed
+      ? 'linear-gradient(45deg, #4caf50, #66bb6a)'
+      : 'linear-gradient(45deg, #e0e0e0, #bdbdbd)'};
+  border: 2px solid
+    ${({ $guessed }) => ($guessed ? '#2e7d32' : 'rgba(0, 0, 0, 0.1)')};
+  color: ${({ $guessed }) => ($guessed ? 'white' : '#666')};
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+export const CityStatsInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  strong {
+    color: #667eea;
+    font-weight: 700;
+  }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+`;
+
+// Enhanced Titles
+export const PageTitle = styled.h1`
+  text-align: center;
+  color: white;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: ${fadeIn} 1s ease-out;
+  background: linear-gradient(45deg, #fff, #f0f8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 
 export const GameInstructions = styled.p`
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 20px;
-  z-index: 1;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
   max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  animation: ${fadeIn} 1s ease-out 0.2s both;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 
+// Enhanced BackButton
 export const BackButton = styled(Link)`
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(19, 42, 87, 0.8);
-  color: white;
-  padding: 8px 15px;
-  border-radius: 20px;
-  text-decoration: none;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  text-decoration: none;
+  border-radius: 50px;
   font-weight: 600;
-  border: 2px solid #ffde00;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 2rem;
   z-index: 10;
 
   &:hover {
-    background: #3b4cca;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
 `;
 
@@ -365,32 +773,12 @@ export const BackgroundElements = styled.div`
 
 export const PokeBallBg = styled.div`
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  background: linear-gradient(
-    to bottom,
-    #ee1515 0%,
-    #ee1515 50%,
-    white 50%,
-    white 100%
-  );
-  opacity: 0.05;
-  z-index: -1;
-  animation: ${pokeBallSpin} 60s linear infinite;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20%;
-    height: 20%;
-    background: white;
-    border-radius: 50%;
-    border: 30px solid #222;
-  }
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  opacity: 0.1;
+  animation: ${spin} 60s linear infinite;
 
   &.ball1 {
     top: 10%;
@@ -412,11 +800,11 @@ export const PlayerSection = styled.section`
 `;
 
 export const SectionTitle = styled.h2`
-  color: #ffde00;
+  color: white;
   text-align: center;
   margin-bottom: 1rem;
   font-size: 1.8rem;
-  text-shadow: 2px 2px 0 #3b4cca;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 `;
 
 export const PlayerList = styled.div`
@@ -427,8 +815,8 @@ export const PlayerList = styled.div`
 `;
 
 export const PlayerCard = styled.div`
-  background: rgba(19, 42, 87, 0.7);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
   padding: 1.5rem;
   width: 180px;
   display: flex;
@@ -436,99 +824,50 @@ export const PlayerCard = styled.div`
   align-items: center;
   cursor: pointer;
   transition: all 0.3s;
-  border: 2px solid rgba(255, 222, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(59, 76, 202, 0.4);
-    border-color: #ffde00;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   }
 `;
 
-export const PlayerAvatar = styled.img`
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  margin-bottom: 1rem;
-  border: 3px solid #ffde00;
-  background-color: white;
-  object-fit: cover;
-`;
-
-export const PlayerInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-export const PlayerName = styled.div`
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #ffde00;
-  margin-bottom: 0.3rem;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-`;
-
-export const PlayerScore = styled.div`
-  font-size: 0.9rem;
-  color: white;
-`;
-
-// Contenitore dei contenuti di gioco
 export const GameContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   gap: 2rem;
+  animation: ${fadeIn} 0.8s ease-out;
   z-index: 1;
 `;
 
-// Elementi aggiuntivi
-export const ButtonGroup = styled.div`
-  display: flex;
-  gap: 1rem;
-
-  @media (max-width: 500px) {
-    flex-direction: column;
-  }
-`;
-
 export const CityCounter = styled.div`
-  background: rgba(19, 42, 87, 0.7);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
   padding: 1rem;
   margin-bottom: 1.5rem;
   text-align: center;
-  border: 2px solid rgba(255, 222, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
   p {
     margin: 0 0 0.5rem 0;
-    color: white;
+    color: #333;
+    font-weight: 500;
   }
 
   strong {
-    color: #ffde00;
+    color: #667eea;
     font-size: 1.2rem;
+    font-weight: 700;
   }
 `;
 
-// export const ResetButton = styled.button`
-//   background: rgba(238, 21, 21, 0.6);
-//   color: white;
-//   border: none;
-//   border-radius: 15px;
-//   padding: 6px 12px;
-//   font-size: 0.9rem;
-//   cursor: pointer;
-//   transition: all 0.2s ease;
-
-//   &:hover {
-//     background: rgba(238, 21, 21, 0.8);
-//     transform: translateY(-2px);
-//   }
-// `;
 export const BuyButton = styled.button`
   background: #ee1515;
   color: white;
@@ -550,176 +889,31 @@ export const BuyButton = styled.button`
     opacity: 0.6;
   }
 `;
-// Form per indovinare - componente principale
-export const GuessFormContainer = styled.div`
-  background: rgba(19, 42, 87, 0.8);
-  padding: 1.5rem;
-  border-radius: 15px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  border: 2px solid rgba(255, 222, 0, 0.5);
-`;
-// Componenti per la schermata dei risultati
-interface ResultBoxProps {
-  $correct: boolean;
-}
-
-export const ResultBox = styled.div<ResultBoxProps>`
-  width: 100%;
-  max-width: 500px;
-  background: ${({ $correct }) =>
-    $correct ? 'rgba(76, 175, 80, 0.9)' : 'rgba(244, 67, 54, 0.9)'};
-  border-radius: 15px;
-  padding: 2.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border: 3px solid
-    ${({ $correct }) => ($correct ? '#ffde00' : 'rgba(255, 255, 255, 0.3)')};
-  animation: ${pulse} 0.5s ease;
-  z-index: 1;
-`;
-
-export const ResultIcon = styled.div`
-  font-size: 3.5rem;
-  color: white;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  animation: ${pulse} 1s infinite;
-`;
-
-export const ResultTitle = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-`;
-
-export const ResultDetails = styled.div`
-  color: white;
-  font-size: 1.2rem;
-  text-align: center;
-  margin-bottom: 1rem;
-  line-height: 1.4;
-`;
-
-export const ResultButton = styled.button`
-  background: #ffde00;
-  color: #3b4cca;
-  border: none;
-  border-radius: 25px;
-  padding: 12px 24px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
-    background: white;
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-`;
-// Aggiungi dopo gli altri stili
-
-// Stili per il componente RemainingCities
-export const CityStatsContainer = styled.div`
-  background: rgba(19, 42, 87, 0.8);
-  border-radius: 15px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  width: 100%;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  border: 2px solid rgba(255, 222, 0, 0.5);
-  z-index: 1;
-`;
-
-export const CityStatsHeader = styled.h3`
-  color: #ffde00;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.2rem;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-`;
-
-export const CityStatsBadges = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 0.5rem 0;
-`;
-
-interface CityBadgeProps {
-  $guessed: boolean;
-}
-
-export const CityBadge = styled.div<CityBadgeProps>`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: ${({ $guessed }) =>
-    $guessed ? 'rgba(76, 175, 80, 0.8)' : 'rgba(0, 0, 0, 0.3)'};
-  border: 2px solid
-    ${({ $guessed }) => ($guessed ? '#ffde00' : 'rgba(255, 255, 255, 0.2)')};
-  color: ${({ $guessed }) => ($guessed ? 'white' : 'rgba(255, 255, 255, 0.6)')};
-  font-size: 1.2rem;
-  transition: all 0.3s;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
-export const CityStatsInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  color: white;
-  font-size: 0.9rem;
-
-  strong {
-    color: #ffde00;
-  }
-
-  @media (max-width: 500px) {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-`;
 
 export const ResetButton = styled.button`
-  background: rgba(238, 21, 21, 0.6);
+  background: linear-gradient(45deg, #f44336, #ef5350);
   color: white;
   border: none;
-  border-radius: 15px;
+  border-radius: 20px;
   padding: 8px 15px;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   align-self: flex-end;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
 
   &:hover {
-    background: rgba(238, 21, 21, 0.8);
     transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(244, 67, 54, 0.4);
   }
+`;
+
+export const LoadingText = styled.div`
+  font-size: 1.5rem;
+  color: white;
+  margin-top: 3rem;
+  text-align: center;
 `;

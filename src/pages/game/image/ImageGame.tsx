@@ -242,6 +242,7 @@ const GameInstructions = styled.p`
 
 const CardGrid = styled.div`
   display: grid;
+
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1rem;
   width: 100%;
@@ -251,7 +252,7 @@ const CardGrid = styled.div`
   align-content: start;
   z-index: 1;
   padding: 0 1rem;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   max-height: calc(100vh - 200px);
 
   &::-webkit-scrollbar {

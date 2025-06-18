@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdClose } from 'react-icons/md';
+import { useGlobalContext } from '../../../context/globalContext';
 
 interface Player {
   id: string;
@@ -37,8 +38,8 @@ interface Category {
 }
 
 const CategoriesGame = () => {
-  // Mantengo tutto il codice della logica uguale
-  const [players, setPlayers] = useState<Player[]>([]);
+  // Sostituisci la gestione locale dei players con il context globale
+  const { players, updatePlayerScore } = useGlobalContext();
   const [activePlayer, setActivePlayer] = useState<Player | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<{
     category: string;
@@ -244,14 +245,19 @@ const CategoriesGame = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Recupera i giocatori dal localStorage
-    const savedPlayers = localStorage.getItem('quizPlayers');
-    if (savedPlayers) {
-      const parsedPlayers = JSON.parse(savedPlayers);
-      setPlayers(parsedPlayers);
-      if (parsedPlayers.length > 0) {
-        setActivePlayer(parsedPlayers[0]);
-      }
+    // Rimuovi il recupero dei giocatori dal localStorage
+    // const savedPlayers = localStorage.getItem('quizPlayers');
+    // if (savedPlayers) {
+    //   const parsedPlayers = JSON.parse(savedPlayers);
+    //   setPlayers(parsedPlayers);
+    //   if (parsedPlayers.length > 0) {
+    //     setActivePlayer(parsedPlayers[0]);
+    //   }
+    // }
+
+    // Imposta il primo player dal context come attivo se non ce n'è uno
+    if (players.length > 0 && !activePlayer) {
+      setActivePlayer(players[0]);
     }
 
     // Recupera le categorie salvate o genera nuove categorie con ID
@@ -271,7 +277,7 @@ const CategoriesGame = () => {
       }));
       setCategories(categoriesWithIds);
     }
-  }, []);
+  }, [players, activePlayer]);
 
   const handleQuestionClick = (
     categoryName: string,
@@ -310,20 +316,14 @@ const CategoriesGame = () => {
   const handleCorrectAnswer = () => {
     if (!activePlayer || !currentQuestion) return;
 
-    // Aggiorna il punteggio del giocatore attivo
-    const updatedPlayers = players.map((player) =>
-      player.id === activePlayer.id
-        ? { ...player, score: player.score + currentQuestion.question.points }
-        : player
-    );
-
-    setPlayers(updatedPlayers);
-    localStorage.setItem('quizPlayers', JSON.stringify(updatedPlayers));
+    // Usa updatePlayerScore dal context invece di gestire localmente
+    const newScore = activePlayer.score + currentQuestion.question.points;
+    updatePlayerScore(activePlayer.id, newScore);
 
     // Aggiorna il giocatore attivo con il nuovo punteggio
     setActivePlayer({
       ...activePlayer,
-      score: activePlayer.score + currentQuestion.question.points,
+      score: newScore,
     });
 
     // Marca la domanda come risposta

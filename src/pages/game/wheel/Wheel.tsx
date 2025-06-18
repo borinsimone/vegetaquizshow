@@ -8,15 +8,15 @@ import { Wheel as RouletteWheel } from 'react-custom-roulette';
 const WHEEL_SEGMENTS = [
   // { id: 1, label: 'Passa', color: '#FF5252', points: 0 },
 
-  {
-    id: 2,
-    label: 'Rebus',
-    color: '#FF9800',
-    points: 200,
-    url: '/game/wheel/rebus',
-  },
+  // {
+  //   id: 2,
+  //   label: 'Rebus',
+  //   color: '#FF9800',
+  //   points: 200,
+  //   url: '/game/wheel/rebus',
+  // },
 
-  { id: 7, label: 'Bonus', color: '#F44336', points: 200 },
+  // { id: 7, label: 'Bonus', color: '#F44336', points: 200 },
   {
     id: 4,
     label: 'Fusioni',
@@ -24,14 +24,14 @@ const WHEEL_SEGMENTS = [
     points: 400,
     url: '/game/wheel/fusion',
   },
-  { id: 8, label: 'Malus', color: '#000000', points: -100 },
-  {
-    id: 5,
-    label: 'Suono',
-    color: '#2196F3',
-    points: 500,
-    url: '/game/wheel/sound',
-  },
+  // { id: 8, label: 'Malus', color: '#000000', points: -100 },
+  // {
+  //   id: 5,
+  //   label: 'Suono',
+  //   color: '#2196F3',
+  //   points: 500,
+  //   url: '/game/wheel/sound',
+  // },
 ];
 
 function Wheel() {

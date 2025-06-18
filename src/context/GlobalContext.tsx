@@ -29,6 +29,9 @@ interface GlobalContextState {
   updatePlayerScore: (id: string, newScore: number) => void;
   activePlayer: Player | null;
   setActivePlayer: (player: Player | null) => void;
+  // Aggiungi queste due righe
+  guessedCards: number[];
+  markCardAsGuessed: (cardId: number) => void;
 }
 
 // Crea il context con un valore iniziale undefined

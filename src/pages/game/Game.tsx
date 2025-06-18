@@ -195,7 +195,7 @@ function Game() {
                     src={player.avatar}
                     alt={player.name}
                   />
-                  {index < 3 && <PlayerBadge $rank={index + 1} />}
+                  {/* {index < 3 && <PlayerBadge $rank={index + 1} />} */}
                 </PlayerAvatarContainer>
 
                 <PlayerInfo>
@@ -564,9 +564,9 @@ const LeaderboardSection = styled.section`
 const LeaderboardContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
   gap: 1rem;
-  overflow-x: auto;
-  overflow-y: hidden;
+
   max-height: none;
   /* padding-bottom: 0.5rem; */
 
